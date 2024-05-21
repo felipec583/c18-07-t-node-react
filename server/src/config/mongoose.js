@@ -1,5 +1,5 @@
 import { connect } from "mongoose";
-import { MONGO_URI } from "../config/constants.js";
+import { MONGO_URI } from "./constants.js";
 
 connect(MONGO_URI).then(() => {
 	console.log("Database funcionando")
