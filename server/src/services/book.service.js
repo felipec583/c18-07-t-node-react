@@ -1,14 +1,10 @@
 import db from "../models/index.js";
 
 const createBook = async (book) => {
-  try {
-    const newBook = await db.Book.create({
-      ...book,
-    });
-    return newBook;
-  } catch {
-    throw error.errmsg;
-  }
+  const newBook = await db.Book.create({
+    ...book,
+  });
+  return newBook;
 };
 
 const getAllBooks = async () => {
@@ -24,6 +20,14 @@ const getAllBooks = async () => {
   } catch (error) {
     throw error.errmsg;
   }
+};
+
+const getBookById = async (id) => {
+  const getBook = await db.Book.findById(id)
+    .populate("author")
+    .populate("genres.genre");
+  if (!getBook) throw new Error("No existe");
+  return getBook;
 };
 
 const addNewAuthor = async (author) => {
@@ -48,6 +52,12 @@ const addNewGenre = async (genre) => {
   }
 };
 
-const bookService = { createBook, addNewAuthor, addNewGenre, getAllBooks };
+const bookService = {
+  createBook,
+  addNewAuthor,
+  addNewGenre,
+  getAllBooks,
+  getBookById,
+};
 
 export default bookService;
