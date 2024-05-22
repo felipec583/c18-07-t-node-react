@@ -1,10 +1,14 @@
 import { connect } from "mongoose";
 import { MONGO_URI } from "./constants.js";
 
-connect(MONGO_URI).then(() => {
-	console.log("Database funcionando")
-})
-	.catch(err => {
-		console.log("Error al cargar database:")
-		console.log(err)
-	})
+const connectDB = async () => {
+  try {
+    await connect(MONGO_URI);
+    console.log("Database funcionando");
+  } catch (error) {
+    console.log("Error al cargar database:");
+    console.log(error);
+  }
+};
+
+export default connectDB;
