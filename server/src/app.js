@@ -1,18 +1,24 @@
 import express from "express";
 import cors from "cors";
-
-import "./services/mongoose.js";
+import connectDB from "./config/mongoose.js";
+import "./config/mongoose.js";
 import { PORT } from "./config/constants.js";
-
-import Users from "./models/user.model.js";
-import Books from "./models/book.model.js";
-import { Types, mongo } from "mongoose";
+import mongoose from "mongoose";
+import bookRoutes from "./routes/book.route.js";
+import testUserRoute from "./routes/userTestRoute.js";
+import userRoute from "./routes/user.routes.js";
+import authRoute from "./routes/auth.routes.js";
 
 const app = express();
-
+connectDB();
 app.use(express.json());
 app.use(cors());
-
-app.listen(PORT, () => {
-  console.log(`SERVER RUNNING ON PORT ${PORT}`);
+app.use("/", bookRoutes);
+app.use("/", userRoute);
+app.use("/", testUserRoute);
+app.use("/", authRoute)
+mongoose.connection.once("open", () => {
+  app.listen(PORT, () => {
+    console.log(`SERVER RUNNING ON PORT ${PORT}`);
+  });
 });
