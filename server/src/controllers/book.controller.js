@@ -21,6 +21,17 @@ const getAllBooks = async (req, res, next) => {
   }
 };
 
+const getBookById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const book = await bookService.getBookById(id);
+    return res.status(200).json(book);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 const addNewAuthor = async (req, res, next) => {
   try {
     const author = req.body;
@@ -48,6 +59,7 @@ const bookController = {
   addNewAuthor,
   addNewGenre,
   getAllBooks,
+  getBookById,
 };
 
 export default bookController;
