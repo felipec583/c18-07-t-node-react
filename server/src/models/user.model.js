@@ -4,8 +4,6 @@ const UserSchema = new mongoose.Schema({
 	email: { type: String, index: true, required: true, unique: true },
 	username: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
-	//role: { type: String, required: true, enum: ["user", "admin"] },
-	//last_connection: { type: Date, default: Date.now, required: true },
 	library: [{ // Para guardar libros (seria como un ver mas tarde)
 		addedDate: { type: Date, default: Date.now, required: true },
 		book: {
@@ -26,19 +24,8 @@ const UserSchema = new mongoose.Schema({
 			},
 		}]
 	}],
-
-	/* Esto al final no hizo falta.
-	reviews: [{
-
-	}],
-
-	comments: [{ // Comentarios (no son las reseñas, serian las respuestas a otras reseñas)
-		type: Types.ObjectId,
-		ref: "comments",
-		required: true
-	}]*/
 })
 
-const Users = mongoose.model("users", UserSchema)
+const User = mongoose.model("users", UserSchema)
 
-export default Users
+export default User

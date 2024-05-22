@@ -1,15 +1,23 @@
-import mongoose, { Types } from "mongoose"
+import mongoose, { Types } from "mongoose";
 
 const ReviewSchema = new mongoose.Schema({
-	user: { type: Types.ObjectId, required: true },
-	text: { type: String, required: true },
-	score: { type: Number, required: true }, // score del 1 al 5
-	date: { type: Date, required: true, },
-	likes: [{
-		user: { type: Types.ObjectId },
-	}]
-})
+  bookId: { type: Types.ObjectId, required: true },
+  userID: { type: Types.ObjectId, required: true },
+  text: { type: String, required: true },
+  rating: { type: Number, required: true }, // score del 1 al 5
+  date: { type: Date, required: true },
+  likes: [
+    {
+      userID: { type: Types.ObjectId },
+    },
+  ],
+  comments: [
+    {
+      commentId: { type: Types.ObjectId, ref: "comments" },
+    },
+  ],
+});
 
-const Reviews = mongoose.model("reviews", ReviewSchema)
+const Review = mongoose.model("reviews", ReviewSchema);
 
-export default Reviews
+export default Review;
