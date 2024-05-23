@@ -1,7 +1,6 @@
 import db from "../models/index.js";
 const addBookToUserLibrary = async (bookId, userId) => {
   const foundUser = await db.User.findById(userId);
-  if (!foundUser) throw new Error("user not found");
 
   const foundBook = await db.Book.findById(bookId);
   if (!foundBook) throw new Error("book not found");
@@ -9,6 +8,7 @@ const addBookToUserLibrary = async (bookId, userId) => {
   const existingBook = foundUser.library.some(
     (el) => el.book.toHexString() === bookId
   );
+
   if (!existingBook) {
     foundUser.library.push({
       book: bookId,
@@ -16,24 +16,24 @@ const addBookToUserLibrary = async (bookId, userId) => {
     await foundUser.save();
     return { "nuevo libro": foundBook.title };
   } else {
-    return "Este libro ya existe en la biblioteca";
+    throw new Error("Este libro ya existe en la biblioteca");
   }
 };
 
 const deleteBookFromUserLibrary = async (bookId, userId) => {
-  const foundUser = await db.User.findById(userId);
-  if (!foundUser) throw new Error("user not found");
-
   const foundBook = await db.Book.findById(bookId);
+  const foundUser = await db.User.findById(userId);
   if (!foundBook) throw new Error("book not found");
 
   const existingBook = foundUser.library.some(
     (el) => el.book.toHexString() === bookId
   );
   if (existingBook) {
-    foundUser.library.filter((el) => el.book.toHexString() !== bookId);
+    foundUser.library = foundUser.library.filter(
+      (el) => el.book.toHexString() !== bookId
+    );
     await foundUser.save();
-    return { "libro eliminado": foundBook.title };
+    return foundBook.title;
   } else {
     return "Este libro no existe en tu biblioteca";
   }

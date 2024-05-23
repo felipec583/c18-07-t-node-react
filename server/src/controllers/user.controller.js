@@ -9,7 +9,6 @@ const addBookToUserLibrary = async (req, res, next) => {
     );
     return res.status(200).json(addBookToLibrary);
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: error.message });
   }
 };
@@ -17,8 +16,12 @@ const addBookToUserLibrary = async (req, res, next) => {
 const deleteBookFromUserLibrary = async (req, res, next) => {
   try {
     const { bookId, userId } = req.body;
+    const deletedBook = await userService.deleteBookFromUserLibrary(
+      bookId,
+      userId
+    );
+    return res.status(200).json({ message: `${deletedBook}` });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: error.message });
   }
 };
@@ -29,7 +32,6 @@ const getUserLibrary = async (req, res, next) => {
     const library = await userService.getUserLibrary(id);
     return res.status(200).json(library);
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: error.message });
   }
 };
