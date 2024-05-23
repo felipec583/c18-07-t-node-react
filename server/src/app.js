@@ -15,7 +15,6 @@ app.use(express.json());
 app.use(cors());
 app.use("/", bookRoutes);
 app.use("/", userRoute);
-app.use("/", testUserRoute);
 app.use("/", authRoute)
 mongoose.connection.once("open", () => {
   app.listen(PORT, () => {
