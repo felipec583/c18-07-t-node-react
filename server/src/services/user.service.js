@@ -1,24 +1,68 @@
 import db from "../models/index.js";
-
 const addBookToUserLibrary = async (bookId, userId) => {
-  const foundUser = db.User.findById(userId);
+  const foundUser = await db.User.findById(userId);
   if (!foundUser) throw new Error("user not found");
 
-  const foundBook = db.Book.findById(bookId);
+  const foundBook = await db.Book.findById(bookId);
   if (!foundBook) throw new Error("book not found");
 
-  const foundBookId = foundBook.select("_id");
-  const existingBook = foundUser.select("library -_id").find({
-    library: {
-      bookId: foundBookId,
-    },
-  });
+  const existingBook = foundUser.library.some(
+    (el) => el.book.toHexString() === bookId
+  );
+  if (!existingBook) {
+    foundUser.library.push({
+      book: bookId,
+    });
+    await foundUser.save();
+    return { "nuevo libro": foundBook.title };
+  } else {
+    return "Este libro ya existe en la biblioteca";
+  }
+};
 
-  return existingBook;
+const deleteBookFromUserLibrary = async (bookId, userId) => {
+  const foundUser = await db.User.findById(userId);
+  if (!foundUser) throw new Error("user not found");
+
+  const foundBook = await db.Book.findById(bookId);
+  if (!foundBook) throw new Error("book not found");
+
+  const existingBook = foundUser.library.some(
+    (el) => el.book.toHexString() === bookId
+  );
+  if (existingBook) {
+    foundUser.library.filter((el) => el.book.toHexString() !== bookId);
+    await foundUser.save();
+    return { "libro eliminado": foundBook.title };
+  } else {
+    return "Este libro no existe en tu biblioteca";
+  }
+};
+
+const getUserLibrary = async (userId) => {
+  const user = db.User.findById(userId);
+  const userLibrary = await user.select("library -_id").populate({
+    path: "library.book",
+    populate: {
+      path: "author genres.genre",
+      select: "name -_id genre",
+    },
+    select: "publishDate description title",
+  });
+  return userLibrary.library.map(({ book }) => ({
+    _id: book._id,
+    title: book.title,
+    publishDate: book.publishDate,
+    author: book.author.name,
+    genres: book.genres.map(({ genre }) => genre),
+    description: book.description,
+  }));
 };
 
 const userService = {
   addBookToUserLibrary,
+  deleteBookFromUserLibrary,
+  getUserLibrary,
 };
 
 export default userService;

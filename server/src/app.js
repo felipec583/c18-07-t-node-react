@@ -4,7 +4,7 @@ import connectDB from "./config/mongoose.js";
 import "./config/mongoose.js";
 import { PORT } from "./config/constants.js";
 import mongoose from "mongoose";
-import bookRoutes from "./routes/book.route.js";
+import bookRoutes from "./routes/book.routes.js";
 import testUserRoute from "./routes/userTestRoute.js";
 import userRoute from "./routes/user.routes.js";
 const app = express();
