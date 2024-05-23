@@ -5,7 +5,6 @@ import "./config/mongoose.js";
 import { PORT } from "./config/constants.js";
 import mongoose from "mongoose";
 import bookRoutes from "./routes/book.routes.js";
-import testUserRoute from "./routes/userTestRoute.js";
 import userRoute from "./routes/user.routes.js";
 import authRoute from "./routes/auth.routes.js";
 
