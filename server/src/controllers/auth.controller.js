@@ -6,13 +6,9 @@ import { JWT_SECRET } from "../config/constants.js"
 const registerUser = async (req, res, next) => {
   try {
     // recordar que la contraseña llega cifrada a este punto
-    let { email, password, username } = req.body
-
-    email = email.toLowerCase()
-    username = username.toLowerCase()
-
+    const { email, password, username } = req.body
     const emailExist = await db.User.findOne({ email: email })
-    console.log(emailExist)
+
     if (emailExist) {
       return res.status(400).json({
         sucess: false,
@@ -45,20 +41,17 @@ const registerUser = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
-    let { username, password } = req.body
-    username = username.toLowerCase()
-
+    const { username, password } = req.body
     const userdb = await db.User.findOne({ username })
+
     if (!userdb) {
       return res.status(404).json({
         success: false,
-        message: "invalid username or password"
+        message: "Invalid username or password"
       })
     }
 
-
     const correctpw = compareSync(password, userdb.password)
-
     if (correctpw) {
 
       const token = jwt.sign(
@@ -74,7 +67,7 @@ const loginUser = async (req, res, next) => {
     } else {
       return res.status(401).json({
         success: false,
-        message: "invalid username or password"
+        message: "Invalid username or password"
       })
     }
   } catch (err) {
