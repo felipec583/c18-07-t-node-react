@@ -3,7 +3,7 @@ const addBookToUserLibrary = async (bookId, userId) => {
   const foundUser = await db.User.findById(userId);
 
   const foundBook = await db.Book.findById(bookId);
-  if (!foundBook) throw new Error("book not found");
+  if (!foundBook) throw new Error("Este libro no existe");
 
   const existingBook = foundUser.library.some(
     (el) => el.book.toHexString() === bookId
