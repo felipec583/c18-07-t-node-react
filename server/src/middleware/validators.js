@@ -10,14 +10,18 @@ const password = () => body("password").exists()
 	.withMessage("Please enter a password at least 8 character and contain at least three numbers")
 	.matches(/[a-zA-Z]./).withMessage('The password must contain at least one letter')
 
-const username = () => body("username", "invalid username").exists()
+const username = () => body("username", "invalid 'username'").exists()
 	.isLength({ min: 5 }).withMessage("Username must contain at least 5 characters")
 	.toLowerCase()
+
+const listname = () => body("listname").exists()
+	.isLength({ min: 3 }).withMessage("List name must contain at least 3 characters")
 
 const validators = {
 	email,
 	password,
-	username
+	username,
+	listname
 }
 
 export default validators

@@ -59,10 +59,25 @@ const getUserLibrary = async (userId) => {
   }));
 };
 
+const createUserList = async (userId, name) => {
+  const user = await db.User.findById(userId);
+  const has = user.list.some(el => el.listname == name)
+  if (has) throw new Error("Ya existe una lista con ese nombre")
+  const newList = user.list.create({
+    creationDate: Date.now(),
+    listname: name,
+    booklist: []
+  })
+  user.list.push(newList)
+  const newData = await user.save()
+  return { added: newList, userList: newData.list }
+}
+
 const userService = {
   addBookToUserLibrary,
   deleteBookFromUserLibrary,
   getUserLibrary,
+  createUserList
 };
 
 export default userService;
