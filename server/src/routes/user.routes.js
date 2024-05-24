@@ -1,22 +1,31 @@
 import express from "express";
 import userController from "../controllers/user.controller.js";
 import middlewares from "../middleware/index.js";
+
+import validators from "../middleware/validators.js";
+
 const router = express.Router();
 
 router.post(
-	"/user/library",
-	middlewares.checkUserId,
+	"/library",
+	middlewares.verifyToken,
 	userController.addBookToUserLibrary
 );
 router.get(
-	"/user/library/:id",
+	"/library/:id",
 	middlewares.checkUserId,
 	userController.getUserLibrary
 );
 router.delete(
-	"/user/library",
-	middlewares.checkUserId,
+	"/library",
+	middlewares.verifyToken,
 	userController.deleteBookFromUserLibrary
+);
+
+router.post("/list",
+	middlewares.verifyToken,
+	middlewares.validationCheck,
+	userController.createUserList
 );
 
 export default router;
