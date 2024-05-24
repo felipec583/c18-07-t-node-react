@@ -9,7 +9,7 @@ const router = express.Router();
 const errorCheck = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(406).json({
+    return res.status(400).json({
       success: false,
       response: errors.array()
     })
@@ -17,7 +17,7 @@ const errorCheck = (req, res, next) => {
   return next()
 }
 
-router.post("/auth/register", [validators.email(), validators.password(), validators.username()], errorCheck, middlewares.hashPassword, authController.registerUser)
-router.post("/auth/login", [validators.username(), validators.password()], errorCheck, authController.loginUser)
+router.post("/register", [validators.email(), validators.password(), validators.username()], errorCheck, middlewares.hashPassword, authController.registerUser)
+router.post("/login", [validators.username(), validators.password()], errorCheck, authController.loginUser)
 
 export default router
