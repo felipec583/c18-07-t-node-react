@@ -55,7 +55,7 @@ const loginUser = async (req, res, next) => {
     if (correctpw) {
 
       const token = jwt.sign(
-        { email: userdb.email, username: userdb.username, createdAt: Date.now() },
+        { email: userdb.email, username: userdb.username, createdAt: Date.now(), id: userdb.id },
         JWT_SECRET,
         { expiresIn: "5d" }
       )
