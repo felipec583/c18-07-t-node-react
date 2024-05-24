@@ -47,15 +47,17 @@ const getUserLibrary = async (userId) => {
       path: "author genres.genre",
       select: "name -_id genre",
     },
-    select: "publishDate description title",
+    select: "publishDate description title image",
   });
-  return userLibrary.library.map(({ book }) => ({
+  return userLibrary.library.map(({ book, addedDate }) => ({
     _id: book._id,
     title: book.title,
     publishDate: book.publishDate,
     author: book.author.name,
-    genres: book.genres.map(({ genre }) => genre),
+    genres: book.genres.map(({ genre }) => genre.genre),
     description: book.description,
+    image: book.image,
+    addedDate,
   }));
 };
 
