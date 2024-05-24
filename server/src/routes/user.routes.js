@@ -3,8 +3,20 @@ import userController from "../controllers/user.controller.js";
 import middlewares from "../middleware/index.js";
 const router = express.Router();
 
-router.post("/", middlewares.verifyToken, userController.addBookToUserLibrary);
-router.get("/", middlewares.verifyToken, userController.getUserLibrary);
-router.delete("/", middlewares.verifyToken, userController.deleteBookFromUserLibrary);
+router.post(
+	"/user/library",
+	middlewares.checkUserId,
+	userController.addBookToUserLibrary
+);
+router.get(
+	"/user/library/:id",
+	middlewares.checkUserId,
+	userController.getUserLibrary
+);
+router.delete(
+	"/user/library",
+	middlewares.checkUserId,
+	userController.deleteBookFromUserLibrary
+);
 
 export default router;

@@ -14,10 +14,7 @@ const addBookToUserLibrary = async (bookId, userId) => {
       book: bookId,
     });
     await foundUser.save();
-    return {
-      library: foundUser.library,
-      added: foundBook
-    };
+    return { "nuevo libro": foundBook.title };
   } else {
     throw new Error("Este libro ya existe en la biblioteca");
   }
@@ -36,10 +33,7 @@ const deleteBookFromUserLibrary = async (bookId, userId) => {
       (el) => el.book.toHexString() !== bookId
     );
     await foundUser.save();
-    return {
-      library: foundUser.library,
-      deleted: foundBook
-    };
+    return foundBook.title;
   } else {
     return "Este libro no existe en tu biblioteca";
   }
