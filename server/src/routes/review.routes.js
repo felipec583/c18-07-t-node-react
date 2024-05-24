@@ -9,4 +9,14 @@ router.post(
   reviewController.addUserReviewToBook
 );
 
+router.put("/review", middlewares.checkUserId, reviewController.updateReview);
+
+router.get(
+  "/review/user/:id",
+  middlewares.checkUserId,
+  reviewController.getUserReviews
+);
+
+router.get("/review/book/:id", reviewController.getBookReviews);
+
 export default router;
