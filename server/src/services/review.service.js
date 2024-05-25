@@ -1,18 +1,10 @@
 import { CURRENT_DATE } from "../config/constants.js";
 import db from "../models/index.js";
-
+import checkBookandUser from "../utils/checkBookandUser.js";
 const addUserReviewToBook = async (userId, bookId, content) => {
-  const foundBook = await db.Book.findById(bookId);
-  if (!foundBook) throw new Error("book not found");
+  const bookAndUserCheck = await checkBookandUser(bookId, userId);
 
-  // verify that the book does not have a review from that user
-
-  const findUserAndBook = await db.Review.findOne({
-    bookId: bookId,
-    userId: userId,
-  });
-
-  if (!findUserAndBook) {
+  if (!bookAndUserCheck) {
     const newReview = await db.Review.create({
       userId,
       bookId,
@@ -24,24 +16,25 @@ const addUserReviewToBook = async (userId, bookId, content) => {
   throw new Error("Ya has hecho una reseña a este libro");
 };
 
-/* const deleteUserReview = async () => {}; */
+const deleteUserReview = async (userId, bookId) => {
+  const bookAndUserCheck = await checkBookandUser(bookId, userId);
+  if (!bookAndUserCheck) throw new Error("No existe esta reseña");
+  const reviewToDeleteId = bookAndUserCheck.id;
+
+  const result = await db.Review.findByIdAndDelete(reviewToDeleteId);
+  return result;
+};
 
 const updateReview = async (userId, bookId, content) => {
-  const foundBook = await db.Book.findById(bookId);
-  if (!foundBook) throw new Error("book not found");
-
-  const findUserAndBook = await db.Review.findOne({
-    bookId: bookId,
-    userId: userId,
-  });
-  if (!findUserAndBook) {
+  const foundBookandUser = await checkBookandUser(bookId, userId);
+  if (!foundBookandUser) {
     throw new Error("Este usuario no tiene reseñas de este libro");
   }
 
-  findUserAndBook.text = content.text;
-  findUserAndBook.rating = content.rating;
-  findUserAndBook.date = CURRENT_DATE;
-  await findUserAndBook.save();
+  foundBookandUser.text = content.text;
+  foundBookandUser.rating = content.rating;
+  foundBookandUser.date = CURRENT_DATE;
+  await foundBookandUser.save();
   return content;
 };
 
@@ -57,11 +50,33 @@ const getBookReviews = async (bookId) => {
   return bookReviews;
 };
 
+const addLikeToReview = async (bookId, userId, userLikeId) => {
+  const foundBookandUser = await checkBookandUser(bookId, userId);
+  if (!foundBookandUser) {
+    throw new Error("Este usuario no tiene reseñas de este libro");
+  }
+  const findUserLike = foundBookandUser.likes.some(
+    (user) => user._id.toString() === userLikeId
+  );
+  if (findUserLike) throw new Error("Ya le has dado like a esta reseña");
+  const userLikeInfo = await db.User.findById(userLikeId).select(
+    "username -_id"
+  );
+  if (!userLikeInfo) throw new Error("Este usuario no existe");
+  foundBookandUser.likes.push(userLikeId);
+  await foundBookandUser.save();
+  return userLikeInfo;
+};
+
+const deleteLikeFromReview = async () => {};
+
 const reviewService = {
   addUserReviewToBook,
   getUserReviews,
   getBookReviews,
   updateReview,
+  deleteUserReview,
+  addLikeToReview,
 };
 
 export default reviewService;
