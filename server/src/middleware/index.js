@@ -1,15 +1,13 @@
 import hashPassword from "./hashPassword.js";
-import passwordSecurity from "./passwordSecurity.js";
-import validateRegister from "./validateRegister.js";
-import validateLogin from "./validateLogin.js";
 import checkUserId from "./checkUserId.js";
+import verifyToken from "./verifyToken.js";
+import validationCheck from "./validationCheck.js";
 
 const middlewares = {
 	hashPassword,
-	passwordSecurity,
-	validateRegister,
-	validateLogin,
-	checkUserId
+	checkUserId,
+	verifyToken,
+	validationCheck
 }
 
 export default middlewares
