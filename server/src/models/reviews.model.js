@@ -1,14 +1,14 @@
 import mongoose, { Types } from "mongoose";
 
 const ReviewSchema = new mongoose.Schema({
-  bookId: { type: Types.ObjectId, required: true },
-  userID: { type: Types.ObjectId, required: true },
+  bookId: { type: Types.ObjectId, required: true, ref: "books" },
+  userId: { type: Types.ObjectId, required: true, ref: "users" },
   text: { type: String, required: true },
-  rating: { type: Number, required: true }, // score del 1 al 5
-  date: { type: Date, required: true },
+  rating: { type: Number, required: true, min: 1, max: 5 }, // score del 1 al 5
+  date: { type: Date, required: true, default: Date.now },
   likes: [
     {
-      userID: { type: Types.ObjectId },
+      userId: { type: Types.ObjectId },
     },
   ],
   comments: [
