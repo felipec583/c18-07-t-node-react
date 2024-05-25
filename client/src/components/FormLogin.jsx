@@ -1,11 +1,22 @@
-import React, { useState } from "react";
-import { Button, Form, Input, Radio } from "antd";
+import { Button, Form, Input } from "antd";
 import { useRutes } from "../hooks/useRutes";
-
+import axios from "axios";
 export default function FormLogin() {
   const { goToHome } = useRutes();
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const onFinish = async (values) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/login",
+        values
+      );
+      if (response) {
+        console.log(response.data);
+        localStorage.setItem("token", response.data.token);
+        goToHome();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -23,17 +34,17 @@ export default function FormLogin() {
       className="w-full flex flex-col items-center justify-center"
     >
       <Form.Item
-        label="Email"
-        name="email"
+        label="Nombre de usuario"
+        name="username"
         rules={[
           {
             required: true,
-            message: "Please input your email!",
+            message: "Please input your username!",
           },
         ]}
         className="w-full my-3"
       >
-        <Input placeholder="Ingrese su mail" />
+        <Input placeholder="Ingrese su usuario" />
       </Form.Item>
 
       <Form.Item
@@ -54,7 +65,6 @@ export default function FormLogin() {
           type="primary"
           htmlType="submit"
           className="w-full h-10 py-3 bg-green-400 rounded-[20px] shadow justify-center items-center gap-2.5 inline-flex"
-          onClick={goToHome}
         >
           Ingresar
         </Button>
