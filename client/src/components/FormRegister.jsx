@@ -1,10 +1,21 @@
 import { Button, Form, Input } from "antd";
 import { useRutes } from "../hooks/useRutes";
-
+import axios from "axios";
 export default function FormRegister() {
-  const { goToHome } = useRutes();
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const { goToLogin } = useRutes();
+  const onFinish = async (values) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/register",
+        values
+      );
+      if (response) {
+        console.log(response.data);
+        goToLogin();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -66,7 +77,6 @@ export default function FormRegister() {
           type="primary"
           htmlType="submit"
           className="w-full h-10 py-3 bg-green-400 rounded-[20px] shadow justify-center items-center gap-2.5 inline-flex"
-          onClick={goToHome}
         >
           Crear cuenta
         </Button>

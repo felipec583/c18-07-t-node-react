@@ -9,10 +9,10 @@ export default function Login() {
     <div>
       <Navbar />
       <div className="flex lg:h-[calc(100vh-80px)] bg-neutral-50">
-        <div className="w-[536px]">
+        <div className="w-[536px] hidden lg:flex">
           <img className="w-full h-full" src="./loginImage.png" />
         </div>
-        <div className="w-[calc(100vw-536px)] flex flex-col items-center justify-center">
+        <div className="w-full lg:w-[calc(100vw-536px)] mt-10 lg:mt-0 flex flex-col items-center justify-center">
           <div className="w-[335px] flex-col justify-start items-start gap-4 inline-flex">
             <div className="w-full">
               <h2 className="text-black text-[28px] font-semibold font-['Inter']">
