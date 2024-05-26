@@ -1,13 +1,19 @@
 import jwt from "jsonwebtoken"
 import { JWT_SECRET } from "../config/constants.js"
-import db from "../models/index.js"
 
 const verifyToken = (req, res, next) => {
-  const { authorization } = req.headers
+  const authorization = req.header("Authorization")
   if (!authorization) {
     return res.status(401).json({
       success: false,
       message: "unable to auth",
+    })
+  }
+
+  if (authorization.startsWith("Bearer") == false) {
+    return res.status(401).json({
+      success: false,
+      message: "authorization token should start with Bearer"
     })
   }
 
@@ -21,7 +27,7 @@ const verifyToken = (req, res, next) => {
       })
     }
 
-    req.credentials = credentials
+    req.credentials = { ...credentials, token }
 
     return next()
   })
