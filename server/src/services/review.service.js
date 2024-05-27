@@ -1,6 +1,8 @@
 import { CURRENT_DATE } from "../config/constants.js";
 import db from "../models/index.js";
 import checkBookandUser from "../utils/checkBookandUser.js";
+import checkPreviousUserComment from "../utils/checkPreviousUserComment.js";
+
 const addUserReviewToBook = async (userId, bookId, content) => {
   const bookAndUserCheck = await checkBookandUser(bookId, userId);
 
@@ -117,12 +119,18 @@ const addCommentToReview = async (bookId, userId, userCommentId, comment) => {
   if (!userLikeInfo) throw new Error("Este usuario no existe");
 
   const foundReviewId = foundBookandUserReview.id;
-  /* Think of a logic that if you have already created a comment,
-you cannot comment again if there is only one comment and belongs to you
-or to set a limit until there a more interactions and it doesnt become spam */
+  const foundComment = await db.Comment.find({ reviewId: foundReviewId });
 
-  /* Say if the next previous comment was made by yourself, you can't comment again
-   */
+  //Si el último comentario pertenece al usuario que está intentando agregar otro.
+  // La idea es para evitar que el usuario espere que otros usuarios comenten también y no se repita.
+
+  //Otra idea puede ser que se le permite 2 comentarios y esperar por otro usuario
+  const isPreviousUserComment = checkPreviousUserComment(
+    foundComment,
+    userCommentId
+  );
+  if (isPreviousUserComment)
+    throw new Error("Debes esperar que otros usuarios comenten");
   const newComment = await db.Comment.create({
     reviewId: foundReviewId,
     createdBy: userCommentId,
