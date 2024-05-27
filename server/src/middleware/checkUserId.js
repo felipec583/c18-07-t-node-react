@@ -2,7 +2,8 @@ import db from "../models/index.js";
 
 const checkUserId = async (req, res, next) => {
   let userId;
-  if (req.body.userId) userId = req.body.userId;
+  if (req.body.userId || req.body.userCommentId)
+    userId = req.body.userId || req.body.userCommentId;
   if (req.params.id) userId = req.params.id;
   const findId = await db.User.findById(userId);
   if (findId) return next();
