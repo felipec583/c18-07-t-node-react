@@ -6,8 +6,9 @@ import { validationResult, } from "express-validator";
 
 const router = express.Router();
 
-
-router.post("/register", [validators.email(), validators.password(), validators.username()], middlewares.validationCheck, middlewares.hashPassword, authController.registerUser)
-router.post("/login", [validators.username(), validators.password()], middlewares.validationCheck, authController.loginUser)
+router.post("/register", [validators.email(), validators.password(), validators.username()], middlewares.validationCheck, middlewares.hashPassword, authController.registerUser);
+router.post("/login", [validators.username(), validators.password()], middlewares.validationCheck, authController.loginUser);
+router.post("/google", authController.googleAuth);
+router.get("/identity", middlewares.verifyToken, authController.identityUser);
 
 export default router

@@ -75,11 +75,75 @@ const createUserList = async (userId, name) => {
   return { added: newList, userList: newData.list }
 }
 
+const addBookToUserList = async (userId, listId, bookId) => {
+  const user = await db.User.findById(userId);
+  const index = user.list.findIndex(el => el.id == listId)
+  if (index < 0) throw new Error("No se encontro esa lista")
+
+  const targetList = user.list[index]
+  const hasBook = targetList.booklist.some(el => el.book == bookId)
+  if (hasBook) throw new Error("Ese libro ya se encuentra en la lista")
+
+  const newBookListed = targetList.booklist.create({
+    addedDate: Date.now(),
+    book: bookId
+  })
+
+  targetList.booklist.push(newBookListed)
+  await user.save()
+  return { list: targetList, totalList: user.list }
+}
+
+const deleteUserListFromListId = async (userId, listId) => {
+  const user = await db.User.findById(userId);
+  const deleted = user.list.find(el => el.id == listId);
+  const filterList = user.list.filter(el => el.id != listId);
+  user.list = filterList
+
+  await user.save()
+  return { new: filterList, deleted: deleted }
+}
+
+const deleteBookFromListId = async (userId, listId, bookId) => {
+  const user = await db.User.findById(userId);
+  const index = user.list.findIndex(el => el.id == listId)
+  if (index < 0) throw new Error("No se encontro la lista")
+
+  const filter = user.list[index].booklist.filter(el => el.id != bookId)
+  user.list[index].booklist = filter
+
+  await user.save()
+  return { new: filter, totalList: user.list }
+}
+
+const changeListNameFromListId = async (userId, listId, newName) => {
+  const user = await db.User.findById(userId);
+  const index = user.list.findIndex(el => el.id == listId)
+  if (index < 0) throw new Error("No se encontro la lista")
+
+  user.list[index].listname = newName
+  await user.save()
+
+  return { new: user.list[index], totalList: user.list }
+}
+
+const getUserList = async (userId, listId) => {
+  const user = await db.User.findById(userId);
+  if (!listId) return { list: user.list }
+
+  return { list: user.list.find(el => el.id == listId) }
+}
+
 const userService = {
   addBookToUserLibrary,
   deleteBookFromUserLibrary,
   getUserLibrary,
-  createUserList
+  createUserList,
+  addBookToUserList,
+  deleteUserListFromListId,
+  deleteBookFromListId,
+  changeListNameFromListId,
+  getUserList
 };
 
 export default userService;
