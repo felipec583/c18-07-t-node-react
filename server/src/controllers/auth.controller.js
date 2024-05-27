@@ -1,36 +1,16 @@
-import jwt from "jsonwebtoken"
-import { compareSync } from "bcrypt"
-import db from "../models/index.js"
-import { JWT_SECRET } from "../config/constants.js"
+import jwt from "jsonwebtoken";
+
+import authService from "../services/auth.service.js";
 
 const registerUser = async (req, res, next) => {
   try {
     // recordar que la contraseña llega cifrada a este punto
     const { email, password, username } = req.body
-    const emailExist = await db.User.findOne({ email: email })
-
-    if (emailExist) {
-      return res.status(400).json({
-        sucess: false,
-        message: "email already in use"
-      })
-    }
-
-    const usernameExist = await db.User.findOne({ username: username })
-    if (usernameExist) {
-      return res.status(400).json({
-        sucess: false,
-        message: "username already in use"
-      })
-    }
-
-    const newUser = await db.User.create({ email, password, username, })
-
+    const newUser = await authService.registerUser({ email, username, password })
     return res.status(201).json({
       success: true,
-      message: "user created",
+      message: "user created"
     })
-
   } catch (err) {
     return res.status(500).json({
       success: false,
@@ -42,47 +22,58 @@ const registerUser = async (req, res, next) => {
 const loginUser = async (req, res, next) => {
   try {
     const { username, password } = req.body
-    const userdb = await db.User.findOne({ username })
-
-    if (!userdb) {
-      return res.status(404).json({
-        success: false,
-        message: "Invalid username or password"
-      })
-    }
-
-    const correctpw = compareSync(password, userdb.password)
-    if (correctpw) {
-
-      const token = jwt.sign(
-        { email: userdb.email, username: userdb.username, createdAt: Date.now(), id: userdb.id },
-        JWT_SECRET,
-        { expiresIn: "5d" }
-      )
-
-      return res.status(200).json({
-        success: true,
-        token,
-      })
-    } else {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid username or password"
-      })
-    }
+    const response = await authService.loginUser({ username, password })
+    return res.status(200).json({
+      success: true,
+      token: response.token,
+      user: response.user
+    })
   } catch (err) {
     return res.status(500).json({
       success: false,
       message: err.message
     })
   }
+}
 
+const googleAuth = async (req, res, next) => {
+  try {
+    const { token } = req.body
+    const response = await authService.googleAuth(token)
+    return res.status(200).json({
+      success: true,
+      token: response.token,
+      user: response.user
+    })
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    })
+  }
+}
 
+const identityUser = async (req, res, next) => {
+  try {
+    const { token } = req.credentials
+    const data = await authService.identityUser(token)
+    return res.status(200).json({
+      success: true,
+      data
+    })
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    })
+  }
 }
 
 const authController = {
   registerUser,
-  loginUser
+  loginUser,
+  googleAuth,
+  identityUser
 }
 
 export default authController
