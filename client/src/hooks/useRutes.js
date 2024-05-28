@@ -5,5 +5,6 @@ export const useRutes = () => {
   const goToHome = () => navigate("/");
   const goToRegister = () => navigate("/register");
   const goToLogin = () => navigate("/login");
-  return { goToHome, goToRegister, goToLogin };
+  const goToDescubrir = () => navigate("/descubrir");
+  return { goToHome, goToRegister, goToLogin, goToDescubrir };
 };

@@ -1,10 +1,10 @@
 import React from "react";
-
+import { MdFileUpload } from "react-icons/md";
 export default function AddLibroHome() {
   return (
     <div className="w-full flex flex-col lg:flex-row h-[600px] lg:h-[360px] mt-24 self-center justify-center items-center gap-20">
-      <div className="flex-col justify-start items-start gap-8 inline-flex">
-        <div className="flex-col justify-start items-start gap-[15px] flex px-3">
+      <div className="flex-col justify-center items-center px-2 gap-8 inline-flex">
+        <div className="flex-col justify-center items-start gap-[15px] flex px-3">
           <div className="text-neutral-800 text-[28px] font-medium font-['Inter']">
             ¿No encontras un libro? ¡Agregalo!
           </div>
@@ -12,11 +12,10 @@ export default function AddLibroHome() {
             ¡Podes subir los libros que desees!
           </div>
         </div>
-        <div className="self-stretch py-3 bg-green-400 rounded-lg shadow justify-center items-center gap-2.5 inline-flex mx-3">
-          <div className="w-8 h-8 relative" />
-          <div className="text-white text-2xl font-semibold font-['Inter']">
-            Subir libro
-          </div>
+        <div className="py-3 bg-green-400 rounded-lg shadow justify-center items-center flex mx-3 w-full">
+          <button className="text-white text-2xl font-semibold font-['Inter'] flex items-center justify-center">
+            <MdFileUpload /> Subir libro
+          </button>
         </div>
       </div>
       <div className="w-[600px] lg:w-[529px] h-full relative flex items-center justify-center">
