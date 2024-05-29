@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 
 import apiRoutes from "./routes/index.routes.js";
 import errorHandler from "./middleware/errorHandler.js";
+import notFoundHandler from "./middleware/notFoundHandler.js";
 
 const app = express();
 connectDB();
@@ -14,7 +15,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api", apiRoutes);
-app.use(errorHandler)
+app.use("*", notFoundHandler);
+app.use(errorHandler);
 
 mongoose.connection.once("open", () => {
   app.listen(PORT, () => {
