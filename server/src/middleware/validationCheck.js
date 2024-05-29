@@ -1,14 +1,12 @@
-import { validationResult } from "express-validator"
+import { validationResult } from "express-validator";
+import CustomError from "../helpers/customError.js";
 
 const validationCheck = (req, res, next) => {
-	const errors = validationResult(req)
-	if (!errors.isEmpty()) {
-		return res.status(400).json({
-			success: false,
-			response: errors.array()
-		})
-	}
-	return next()
-}
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new CustomError(400, "", { ...errors.array() });
+  }
+  return next();
+};
 
-export default validationCheck
+export default validationCheck;

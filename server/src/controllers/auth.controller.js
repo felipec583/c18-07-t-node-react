@@ -5,75 +5,73 @@ import authService from "../services/auth.service.js";
 const registerUser = async (req, res, next) => {
   try {
     // recordar que la contraseña llega cifrada a este punto
-    const { email, password, username } = req.body
-    const newUser = await authService.registerUser({ email, username, password })
+    const { email, password, username } = req.body;
+    const newUser = await authService.registerUser({
+      email,
+      username,
+      password,
+    });
     return res.status(201).json({
       success: true,
-      message: "user created"
-    })
+      message: "user created",
+    });
   } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: err.message
-    })
+    next(err);
   }
-}
+};
 
 const loginUser = async (req, res, next) => {
   try {
-    const { username, password } = req.body
-    const response = await authService.loginUser({ username, password })
+    const { username, password } = req.body;
+    const response = await authService.loginUser({ username, password });
     return res.status(200).json({
       success: true,
       token: response.token,
-      user: response.user
-    })
+      user: response.user,
+    });
   } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: err.message
-    })
+    next(err);
   }
-}
+};
 
 const googleAuth = async (req, res, next) => {
   try {
-    const { token } = req.body
-    const response = await authService.googleAuth(token)
+    const { token } = req.body;
+    const response = await authService.googleAuth(token);
     return res.status(200).json({
       success: true,
       token: response.token,
-      user: response.user
-    })
+      user: response.user,
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,
-      message: err.message
-    })
+      message: err.message,
+    });
   }
-}
+};
 
 const identityUser = async (req, res, next) => {
   try {
-    const { token } = req.credentials
-    const data = await authService.identityUser(token)
+    const { token } = req.credentials;
+    const data = await authService.identityUser(token);
     return res.status(200).json({
       success: true,
-      data
-    })
+      data,
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,
-      message: err.message
-    })
+      message: err.message,
+    });
   }
-}
+};
 
 const authController = {
   registerUser,
   loginUser,
   googleAuth,
-  identityUser
-}
+  identityUser,
+};
 
-export default authController
+export default authController;

@@ -6,7 +6,7 @@ const getUserReviews = async (req, res, next) => {
     const userReviews = await reviewService.getUserReviews(id);
     return res.status(200).json(userReviews);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -16,7 +16,7 @@ const getBookReviews = async (req, res, next) => {
     const bookReviews = await reviewService.getBookReviews(id);
     return res.status(200).json(bookReviews);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -27,7 +27,7 @@ const addUserReviewToBook = async (req, res, next) => {
     const review = await reviewService.addUserReviewToBook(id, bookId, content);
     return res.status(200).json({ review: review });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -38,7 +38,7 @@ const updateReview = async (req, res, next) => {
     const updatedReview = await reviewService.updateReview(id, bookId, content);
     return res.status(200).json({ message: updatedReview });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -49,7 +49,7 @@ const deleteUserReview = async (req, res, next) => {
     const deletedReview = await reviewService.deleteUserReview(id, bookId);
     return res.status(200).json({ message: deletedReview });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -69,7 +69,7 @@ const addLikeToReview = async (req, res, next) => {
       .status(200)
       .json({ message: `Un like de ${addedLikeUser?.username}` });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -81,7 +81,7 @@ const deleteLikeFromReview = async (req, res, next) => {
     await reviewService.deleteLikeFromReview(bookId, userId, id);
     return res.status(200).json({ message: `Like eliminado` });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -101,7 +101,7 @@ const addCommentToReview = async (req, res, next) => {
 
     return res.status(200).json({ message: newComment });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -117,7 +117,7 @@ const updateComment = async (req, res, next) => {
     );
     return res.status(200).json({ ...updatedComment });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -128,7 +128,7 @@ const deleteComment = async (req, res, next) => {
     await reviewService.deleteComment(reviewId, id, commentId);
     return res.status(200).json({ message: "Comentario eliminado" });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -138,7 +138,7 @@ const getUserReviewsComments = async (req, res, next) => {
     const userComments = await reviewService.getUserReviewsComments(id);
     return res.status(200).json(userComments);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 const reviewController = {

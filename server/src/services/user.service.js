@@ -1,9 +1,11 @@
 import db from "../models/index.js";
+import CustomError from "../helpers/customError.js";
+
 const addBookToUserLibrary = async (bookId, userId) => {
   const foundUser = await db.User.findById(userId);
 
   const foundBook = await db.Book.findById(bookId);
-  if (!foundBook) throw new Error("Este libro no existe");
+  if (!foundBook) throw new CustomError(400, "Este libro no existe");
 
   const existingBook = foundUser.library.some(
     (el) => el.book.toHexString() === bookId
@@ -16,14 +18,14 @@ const addBookToUserLibrary = async (bookId, userId) => {
     await foundUser.save();
     return { "nuevo libro": foundBook.title };
   } else {
-    throw new Error("Este libro ya existe en la biblioteca");
+    throw new CustomError(400, "Este libro ya existe en la biblioteca");
   }
 };
 
 const deleteBookFromUserLibrary = async (bookId, userId) => {
   const foundBook = await db.Book.findById(bookId);
   const foundUser = await db.User.findById(userId);
-  if (!foundBook) throw new Error("book not found");
+  if (!foundBook) throw new CustomError(400, "Este libro no existe");
 
   const existingBook = foundUser.library.some(
     (el) => el.book.toHexString() === bookId
@@ -63,76 +65,77 @@ const getUserLibrary = async (userId) => {
 
 const createUserList = async (userId, name) => {
   const user = await db.User.findById(userId);
-  const has = user.list.some(el => el.listname == name)
-  if (has) throw new Error("Ya existe una lista con ese nombre")
+  const has = user.list.some((el) => el.listname == name);
+  if (has) throw new CustomError(400, "Ya existe una lista con ese nombre");
   const newList = user.list.create({
     creationDate: Date.now(),
     listname: name,
-    booklist: []
-  })
-  user.list.push(newList)
-  const newData = await user.save()
-  return { added: newList, userList: newData.list }
-}
+    booklist: [],
+  });
+  user.list.push(newList);
+  const newData = await user.save();
+  return { added: newList, userList: newData.list };
+};
 
 const addBookToUserList = async (userId, listId, bookId) => {
   const user = await db.User.findById(userId);
-  const index = user.list.findIndex(el => el.id == listId)
-  if (index < 0) throw new Error("No se encontro esa lista")
+  const index = user.list.findIndex((el) => el.id == listId);
+  if (index < 0) throw new CustomError(400, "No se encontro esa lista");
 
-  const targetList = user.list[index]
-  const hasBook = targetList.booklist.some(el => el.book == bookId)
-  if (hasBook) throw new Error("Ese libro ya se encuentra en la lista")
+  const targetList = user.list[index];
+  const hasBook = targetList.booklist.some((el) => el.book == bookId);
+  if (hasBook)
+    throw new CustomError(400, "Ese libro ya se encuentra en la lista");
 
   const newBookListed = targetList.booklist.create({
     addedDate: Date.now(),
-    book: bookId
-  })
+    book: bookId,
+  });
 
-  targetList.booklist.push(newBookListed)
-  await user.save()
-  return { list: targetList, totalList: user.list }
-}
+  targetList.booklist.push(newBookListed);
+  await user.save();
+  return { list: targetList, totalList: user.list };
+};
 
 const deleteUserListFromListId = async (userId, listId) => {
   const user = await db.User.findById(userId);
-  const deleted = user.list.find(el => el.id == listId);
-  const filterList = user.list.filter(el => el.id != listId);
-  user.list = filterList
+  const deleted = user.list.find((el) => el.id == listId);
+  const filterList = user.list.filter((el) => el.id != listId);
+  user.list = filterList;
 
-  await user.save()
-  return { new: filterList, deleted: deleted }
-}
+  await user.save();
+  return { new: filterList, deleted: deleted };
+};
 
 const deleteBookFromListId = async (userId, listId, bookId) => {
   const user = await db.User.findById(userId);
-  const index = user.list.findIndex(el => el.id == listId)
-  if (index < 0) throw new Error("No se encontro la lista")
+  const index = user.list.findIndex((el) => el.id == listId);
+  if (index < 0) throw new CustomError(400, "No se encontro la lista");
 
-  const filter = user.list[index].booklist.filter(el => el.id != bookId)
-  user.list[index].booklist = filter
+  const filter = user.list[index].booklist.filter((el) => el.id != bookId);
+  user.list[index].booklist = filter;
 
-  await user.save()
-  return { new: filter, totalList: user.list }
-}
+  await user.save();
+  return { new: filter, totalList: user.list };
+};
 
 const changeListNameFromListId = async (userId, listId, newName) => {
   const user = await db.User.findById(userId);
-  const index = user.list.findIndex(el => el.id == listId)
-  if (index < 0) throw new Error("No se encontro la lista")
+  const index = user.list.findIndex((el) => el.id == listId);
+  if (index < 0) throw new CustomError(400, "No se encontro la lista");
 
-  user.list[index].listname = newName
-  await user.save()
+  user.list[index].listname = newName;
+  await user.save();
 
-  return { new: user.list[index], totalList: user.list }
-}
+  return { new: user.list[index], totalList: user.list };
+};
 
 const getUserList = async (userId, listId) => {
   const user = await db.User.findById(userId);
-  if (!listId) return { list: user.list }
+  if (!listId) return { list: user.list };
 
-  return { list: user.list.find(el => el.id == listId) }
-}
+  return { list: user.list.find((el) => el.id == listId) };
+};
 
 const userService = {
   addBookToUserLibrary,
@@ -143,7 +146,7 @@ const userService = {
   deleteUserListFromListId,
   deleteBookFromListId,
   changeListNameFromListId,
-  getUserList
+  getUserList,
 };
 
 export default userService;
