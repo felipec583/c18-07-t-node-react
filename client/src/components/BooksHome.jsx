@@ -13,7 +13,7 @@ export default function BooksHome() {
       </div>
       <div className="w-full lg:w-[80%]  flex-col justify-start items-center lg:gap-20 flex">
         <div className="flex-col justify-start items-start lg:gap-[53px] flex">
-          <div className="flex-col justify-start items-start lg:gap-5 flex">
+          <div className="flex-col justify-start items-start lg:gap-5 flex w-full">
             <div className="w-full flex-col justify-start items-start lg:gap-[21px] flex px-3 lg:px-0">
               <div className="w-full justify-between items-center inline-flex">
                 <div className="text-zinc-800 text-[28px] font-medium font-['Inter']">
@@ -35,9 +35,9 @@ export default function BooksHome() {
               ].map((title, index) => (
                 <div
                   key={index}
-                  className="w-auto flex-col justify-center items-center lg:mx-0 mx-2 lg:gap-3 lg:inline-flex"
+                  className="w-[160px] flex-col justify-center items-center lg:mx-0 mx-2 lg:gap-3 lg:inline-flex"
                 >
-                  <div className="w-[160px] lg:w-[180px] h-[276.21px] relative">
+                  <div className="w-full h-[276.21px] relative">
                     <img
                       className="w-full h-[276.21px] left-0 top-0 absolute"
                       src="./image 6.png"
@@ -51,7 +51,7 @@ export default function BooksHome() {
               ))}
             </div>
           </div>
-          <div className="flex-col justify-start items-start gap-5 flex">
+          <div className="flex-col justify-start items-start gap-5 flex w-full">
             <div className="w-full justify-between items-center inline-flex px-3 lg:px-0">
               <div className="text-zinc-800 text-[28px] font-medium font-['Inter']">
                 Romance:
@@ -73,7 +73,7 @@ export default function BooksHome() {
                   key={index}
                   className="w-auto flex-col justify-center items-center mx-2 lg:mx-0 lg:gap-3 lg:flex"
                 >
-                  <div className="w-[160px] lg:w-[180px] h-[276.21px] relative">
+                  <div className="w-[160px] h-[276.21px] relative">
                     <img
                       className="w-full h-[276.21px] left-0 top-0 absolute"
                       src="./image 7.png"

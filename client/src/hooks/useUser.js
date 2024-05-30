@@ -1,4 +1,3 @@
-// useUser.js
 import axios from "axios";
 import { useRutes } from "./useRutes";
 import { useDispatch } from "react-redux";
