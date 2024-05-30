@@ -1,10 +1,23 @@
-import { configureStore, createEntityAdapter } from "@reduxjs/toolkit";
-import counterReducer from "./counterSlice";
+// store.js
+import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import userSlice from "./userSlice";
 
-const store = configureStore({
-    reducer: {
-        counter: counterReducer
-    }
-})
+const persistConfig = {
+  key: "root",
+  storage,
+};
 
-export default store;
+const rootReducer = combineReducers({
+  user: userSlice,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+});
+
+export const persistor = persistStore(store);

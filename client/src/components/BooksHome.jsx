@@ -40,7 +40,7 @@ export default function BooksHome() {
                   <div className="w-[160px] lg:w-[180px] h-[276.21px] relative">
                     <img
                       className="w-full h-[276.21px] left-0 top-0 absolute"
-                      src="https://via.placeholder.com/180x276"
+                      src="./image 6.png"
                       alt={title}
                     />
                   </div>
@@ -76,7 +76,7 @@ export default function BooksHome() {
                   <div className="w-[160px] lg:w-[180px] h-[276.21px] relative">
                     <img
                       className="w-full h-[276.21px] left-0 top-0 absolute"
-                      src="https://via.placeholder.com/180x276"
+                      src="./image 7.png"
                       alt={title}
                     />
                   </div>

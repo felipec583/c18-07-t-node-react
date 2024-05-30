@@ -1,25 +1,8 @@
 import { Button, Form, Input } from "antd";
-import { useRutes } from "../hooks/useRutes";
-import axios from "axios";
+import useUser from "../hooks/useUser";
 export default function FormRegister() {
-  const { goToLogin } = useRutes();
-  const onFinish = async (values) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/register",
-        values
-      );
-      if (response) {
-        console.log(response.data);
-        goToLogin();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+  const { handleRegister } = useUser();
+
   return (
     <Form
       name="basic"
@@ -27,8 +10,7 @@ export default function FormRegister() {
       initialValues={{
         remember: true,
       }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
+      onFinish={handleRegister}
       autoComplete="off"
       className="w-full flex flex-col items-center justify-center"
     >
