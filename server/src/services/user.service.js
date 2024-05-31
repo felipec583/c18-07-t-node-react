@@ -51,7 +51,7 @@ const getUserLibrary = async (userId) => {
     },
     select: "publishDate description title image",
   });
-  return userLibrary.library.map(({ book, addedDate }) => ({
+  return userLibrary.library.map(({ book, addedDate, status }) => ({
     _id: book._id,
     title: book.title,
     publishDate: book.publishDate,
@@ -60,7 +60,20 @@ const getUserLibrary = async (userId) => {
     description: book.description,
     image: book.image,
     addedDate,
+    status,
   }));
+};
+
+const updateBookStatus = async (userId, bookId, status) => {
+  const foundUser = await db.User.findById(userId);
+  if (!foundUser) throw new CustomError(400, "El usuario no existe");
+  const bookInLibrary = foundUser.library.find(
+    (book) => book.book.toHexString() === bookId
+  );
+  if (!bookInLibrary)
+    throw new CustomError(400, "Este libro no existe en tu librería");
+  bookInLibrary.status = status;
+  await foundUser.save();
 };
 
 const createUserList = async (userId, name) => {
@@ -147,6 +160,7 @@ const userService = {
   deleteBookFromListId,
   changeListNameFromListId,
   getUserList,
+  updateBookStatus,
 };
 
 export default userService;

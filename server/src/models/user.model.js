@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema({
 			ref: "books",
 			required: true
 		},
+		status: { type: String, enum: ['to-read', 'reading', 'read'], default: 'to-read' }
 	}],
 	list: [{ // lista de libros a crear por el usuario
 		creationDate: { type: Date, default: Date.now, required: true },
