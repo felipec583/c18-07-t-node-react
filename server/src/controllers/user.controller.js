@@ -32,6 +32,17 @@ const getUserLibrary = async (req, res, next) => {
   }
 };
 
+const updateBookStatus = async (req, res, next) => {
+  try {
+    const { id } = req.credentials;
+    const { status, bookId } = req.body;
+    await userService.updateBookStatus(id, bookId, status);
+    res.status(200).json({ updatedStatus: status });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createUserList = async (req, res, next) => {
   try {
     const { id } = req.credentials;
@@ -112,6 +123,7 @@ const userController = {
   deleteBookFromListId,
   changeListNameFromListId,
   getUserList,
+  updateBookStatus
 };
 
 export default userController;
