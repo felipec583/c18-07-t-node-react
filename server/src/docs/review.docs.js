@@ -96,3 +96,341 @@
  *         text: Great book!
  *         createdAt: 2022-01-01
  */
+
+/**
+ * @openapi
+ * paths:
+ *   /review/user/{id}:
+ *     get:
+ *       summary: Get all reviews by user idñ
+ *       tags:
+ *         - Review
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The user id
+ *       responses:
+ *         '200':
+ *           description: Reviews retrieved
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: 123e4567-e89b-12d3-a456-426614174000
+ *                     bookId:
+ *                       type: string
+ *                       example: 123e4567-e89b-12d3-a456-426614174000
+ *                     userId:
+ *                       type: string
+ *                       example: 123e4567-e89b-12d3-a456-426614174000
+ *                     text:
+ *                       type: string
+ *                       example: Great book!
+ *                     rating:
+ *                       type: number
+ *                       example: 5
+ *                     date:
+ *                       type: string
+ *                       example: 2022-01-01
+ *                     likes:
+ *                       type: number
+ *                       example: 0
+ *                     comments:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Comment'
+ *         '404':
+ *           description: Not found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Este usuario no existe
+ */
+
+/**
+ * @openapi
+ * paths:
+ *   /review/book/{id}:
+ *     get:
+ *       summary: Get all reviews by book id
+ *       tags:
+ *         - Review
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The book id
+ *       responses:
+ *         '200':
+ *           description: Reviews retrieved
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: 123e4567-e89b-12d3-a456-426614174000
+ *                     bookId:
+ *                       type: string
+ *                       example: 123e4567-e89b-12d3-a456-426614174000
+ *                     userId:
+ *                       type: string
+ *                       example: 123e4567-e89b-12d3-a456-426614174000
+ *                     text:
+ *                       type: string
+ *                       example: Great book!
+ *                     rating:
+ *                       type: number
+ *                       example: 5
+ *                     date:
+ *                       type: string
+ *                       example: 2022-01-01
+ *                     likes:
+ *                       type: number
+ *                       example: 0
+ *                     comments:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Comment'
+ *         '400':
+ *           description: Bad request
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Este libro no existe
+ *                   details:
+ *                     type: object
+ *                     properties:
+ *                       success:
+ *                         type: boolean
+ *                         example: false
+ */
+
+/**
+ * @openapi
+ * paths:
+ *   /review:
+ *     post:
+ *       summary: Create a new review
+ *       tags:
+ *         - Review
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 bookId:
+ *                   type: string
+ *                   example: 123e4567-e89b-12d3-a456-426614174000
+ *                 text:
+ *                   type: string
+ *                   example: Great book!
+ *                 rating:
+ *                   type: number
+ *                   example: 5
+ *       responses:
+ *         '200':
+ *           description: Review created
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Review'
+ *         '401':
+ *           description: Unauthorized
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     example: false
+ *                   message:
+ *                     type: string
+ *                     example: Unauthorized
+ *         '400':
+ *           description: Bad request
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     example: false
+ *                   message:
+ *                     type: string
+ *                     example: Ya has hecho una reseña de este libro
+ *         '404':
+ *           description: Book not found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     example: false
+ *                   message:
+ *                     type: string
+ *                     example: Este libro no existe
+ */
+
+/**
+ * @openapi
+ * paths:
+ *   /review/:
+ *     put:
+ *       summary: Update a review
+ *       tags:
+ *         - Review
+ *       security:
+ *         - bearerAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 bookId:
+ *                   type: string
+ *                   example: 123e4567-e89b-12d3-a456-426614174000
+ *                 text:
+ *                   type: string
+ *                   example: Great book!
+ *                 rating:
+ *                   type: number
+ *                   example: 5
+ *       responses:
+ *         '200':
+ *           description: Review updated
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: object
+ *                     properties:
+ *                       text:
+ *                         type: string
+ *                         example: Reseña actualizada
+ *                       rating:
+ *                         type: number
+ *                         example: 5
+ *         '401':
+ *           description: Unauthorized
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     example: false
+ *                   message:
+ *                     type: string
+ *                     example: Unauthorized
+ *         '400':
+ *           description: Bad request
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: Este usuario no tiene reseñas de este libro
+ *                   details:
+ *                     type: object
+ *                     properties:
+ *                       success:
+ *                         type: boolean
+ *                         example: false
+ */
+
+/**
+ * @openapi
+ * paths:
+ *   /review/:
+ *     delete:
+ *       summary: Delete a review
+ *       tags:
+ *         - Review
+ *       security:
+ *         - bearerAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 bookId:
+ *                   type: string
+ *                   example: 123e4567-e89b-12d3-a456-426614174000
+ *       responses:
+ *         '200':
+ *           description: Review deleted
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   deletedReview:
+ *                     $ref: '#/components/schemas/Review'
+ *
+ *         '400':
+ *           description: Bad request
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: No existe reseña de este libro
+ *                   details:
+ *                     type: object
+ *                     properties:
+ *                       success:
+ *                         type: boolean
+ *                         example: false
+ *         '401':
+ *           description: Unauthorized
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     example: false
+ *                   message:
+ *                     type: string
+ *                     example: Unauthorized
+ */
