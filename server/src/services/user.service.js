@@ -37,7 +37,7 @@ const deleteBookFromUserLibrary = async (bookId, userId) => {
     await foundUser.save();
     return foundBook.title;
   } else {
-    return "Este libro no existe en tu biblioteca";
+    throw new CustomError(404, "Este libro no existe en tu biblioteca");
   }
 };
 
@@ -51,8 +51,9 @@ const getUserLibrary = async (userId) => {
     },
     select: "publishDate description title image",
   });
-  return userLibrary.library.map(({ book, addedDate, status }) => ({
-    _id: book._id,
+  return userLibrary.library.map(({ book, addedDate, status, id }) => ({
+    _id: id,
+    bookId: book._id,
     title: book.title,
     publishDate: book.publishDate,
     author: book.author.name,
