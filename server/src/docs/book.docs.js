@@ -19,7 +19,7 @@
  *         - image
  *         - description
  *       properties:
- *         id:
+ *         _id:
  *           type: string
  *           description: The auto-generated id of the book
  *         publishDate:
@@ -49,6 +49,7 @@
  *           type: string
  *           description: The description of the book
  *       example:
+ *         _id: 664fcf1f0678aaabb7b59ca8
  *         publishDate: 2022-01-01
  *         author: "author"
  *         genres: ["genre"]
@@ -91,4 +92,22 @@
  *       example:
  *         id: 1
  *         name: John Doe
+ */
+
+
+/**
+ * @openapi
+ * /books:
+ *   get:
+ *     summary: Get all books
+ *     tags: [Book]
+ *     responses:
+ *       "200":
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Book'
  */
