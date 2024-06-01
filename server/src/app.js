@@ -6,19 +6,19 @@ import { PORT } from "./config/constants.js";
 import mongoose from "mongoose";
 import morgan from "morgan";
 import apiRoutes from "./routes/index.routes.js";
-import errorHandler from "./middleware/errorHandler.js";
-import notFoundHandler from "./middleware/notFoundHandler.js";
 import morganConfig from "./config/logger.js";
 import middlewares from "./middleware/index.js";
+import swaggerDoc from "./config/swagger.js";
 
 const app = express();
 connectDB();
 app.use(express.json());
 app.use(cors());
-
+app.use(express.static("public"));
 app.use(morgan(morganConfig));
 
 app.use("/api", apiRoutes);
+swaggerDoc(app, PORT);
 app.use("*", middlewares.notFoundHandler);
 app.use(middlewares.errorHandler);
 
