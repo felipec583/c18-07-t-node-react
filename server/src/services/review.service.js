@@ -136,7 +136,7 @@ const addCommentToReview = async (bookId, userId, userCommentId, comment) => {
   const newComment = await db.Comment.create({
     reviewId: foundReviewId,
     createdBy: userCommentId,
-    commentText: comment,
+    text: comment,
   });
 
   foundBookandUserReview.comments.push({
@@ -168,7 +168,7 @@ const updateComment = async (
   if (!findCommentCreator)
     throw new CustomError(400, "Este usuario no tiene comentarios");
 
-  findCommentCreator.commentText = newComment;
+  findCommentCreator.text = newComment;
   await findCommentCreator.save();
 
   return { "nuevo comentario": newComment };
