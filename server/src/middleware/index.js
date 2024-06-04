@@ -4,6 +4,7 @@ import verifyToken from "./verifyToken.js";
 import validationCheck from "./validationCheck.js";
 import errorHandler from "./errorHandler.js";
 import notFoundHandler from "./notFoundHandler.js";
+import errorMessageInterceptor from "./errorMessageInterceptor.js";
 
 const middlewares = {
   hashPassword,
@@ -12,6 +13,7 @@ const middlewares = {
   validationCheck,
   errorHandler,
   notFoundHandler,
+  errorMessageInterceptor
 };
 
 export default middlewares;

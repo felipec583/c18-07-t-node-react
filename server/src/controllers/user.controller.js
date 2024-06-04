@@ -1,5 +1,16 @@
 import userService from "../services/user.service.js";
 
+const updateUserDescription = async (req, res, next) => {
+  try {
+    const { id } = req.credentials;
+    const { description } = req.body;
+    await userService.updateUserDescription(id, description);
+    return res.status(201).json({ message: description });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const addBookToUserLibrary = async (req, res, next) => {
   try {
     const { id } = req.credentials;
@@ -123,7 +134,8 @@ const userController = {
   deleteBookFromListId,
   changeListNameFromListId,
   getUserList,
-  updateBookStatus
+  updateBookStatus,
+  updateUserDescription
 };
 
 export default userController;

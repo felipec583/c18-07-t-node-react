@@ -32,6 +32,14 @@
  *           type: string
  *           description: The user's description
  *           default: empty string
+ *         profilePicture:
+ *           type: string
+ *           description: The user's profile picture
+ *           default: generic profile picture url
+ *         accountType:
+ *           type: string
+ *           description: The user's account type
+ *           default: 'user'
  *         library:
  *           type: array
  *           $ref: '#/components/schemas/Library'

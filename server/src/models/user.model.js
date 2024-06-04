@@ -5,6 +5,8 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   description: { type: String, required: false, default: "" },
+  profilePic: { type: String, required: false, default: "https://www.seekpng.com/png/detail/115-1150053_avatar-png-transparent-png-royalty-free-default-user.png" },
+  accountType: { type: String, required: true, default: "mail", enum:["mail", "google"] },
   library: [
     {
       // Para guardar libros (seria como un ver mas tarde)

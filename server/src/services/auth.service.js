@@ -39,7 +39,14 @@ const loginUser = async ({ username, password }) => {
 
   return {
     token: jwtToken,
-    user: { username: userdb.username, email: userdb.email, id: userdb.id },
+    user: {
+      username: userdb.username,
+      email: userdb.email,
+      id: userdb.id,
+      description: userdb.description,
+      profilePicture: userdb.profilePic,
+      type: userdb.accountType
+    },
   };
 };
 
@@ -81,15 +88,11 @@ const googleAuth = async (token) => {
   };
 };
 
-const identityUser = async (token) => {
-  return jwt.verify(token, JWT_SECRET);
-};
 
 const authService = {
   registerUser,
   loginUser,
   googleAuth,
-  identityUser,
 };
 
 export default authService;

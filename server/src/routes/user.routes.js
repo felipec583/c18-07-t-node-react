@@ -4,6 +4,10 @@ import middlewares from "../middleware/index.js";
 
 const router = express.Router();
 
+
+router.put("/", middlewares.verifyToken, userController.updateUserDescription)
+
+
 router.post(
   "/library",
   middlewares.verifyToken,

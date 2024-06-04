@@ -20,6 +20,7 @@ app.use(cors());
 app.use(express.static("public"));
 app.use(morgan(morganConfig));
 
+app.use("", middlewares.errorMessageInterceptor)
 app.use("/api", apiRoutes);
 //app.use(express.static(path.join(__dirname, "public", "dist"))) // De ser necesario añadir el frontend aqui.
 swaggerDoc(app, PORT);
