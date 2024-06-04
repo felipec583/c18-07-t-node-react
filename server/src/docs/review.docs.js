@@ -102,7 +102,7 @@
  * paths:
  *   /review/user/{id}:
  *     get:
- *       summary: Get all reviews by user idñ
+ *       summary: Get all reviews by user id
  *       tags:
  *         - Review
  *       parameters:
