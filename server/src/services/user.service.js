@@ -1,6 +1,13 @@
 import db from "../models/index.js";
 import CustomError from "../helpers/customError.js";
 
+const updateUserDescription = async (userId, description) => {
+  const foundUser = await db.User.findById(userId);
+
+  foundUser.description = description;
+  await foundUser.save();
+};
+
 const addBookToUserLibrary = async (bookId, userId) => {
   const foundUser = await db.User.findById(userId);
 
@@ -162,6 +169,7 @@ const userService = {
   changeListNameFromListId,
   getUserList,
   updateBookStatus,
+  updateUserDescription,
 };
 
 export default userService;
