@@ -51,27 +51,12 @@ const googleAuth = async (req, res, next) => {
   }
 };
 
-const identityUser = async (req, res, next) => {
-  try {
-    const { token } = req.credentials;
-    const data = await authService.identityUser(token);
-    return res.status(200).json({
-      success: true,
-      data,
-    });
-  } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: err.message,
-    });
-  }
-};
+
 
 const authController = {
   registerUser,
   loginUser,
   googleAuth,
-  identityUser,
 };
 
 export default authController;

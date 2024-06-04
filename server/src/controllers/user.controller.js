@@ -1,5 +1,16 @@
 import userService from "../services/user.service.js";
 
+const updateUserDescription = async (req, res, next) => {
+  try {
+    const { id } = req.credentials;
+    const { description } = req.body;
+    await userService.updateUserDescription(id, description);
+    return res.status(201).json({ message: description });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const addBookToUserLibrary = async (req, res, next) => {
   try {
     const { id } = req.credentials;
@@ -27,6 +38,17 @@ const getUserLibrary = async (req, res, next) => {
     const { id } = req.params;
     const library = await userService.getUserLibrary(id);
     return res.status(200).json(library);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateBookStatus = async (req, res, next) => {
+  try {
+    const { id } = req.credentials;
+    const { status, bookId } = req.body;
+    await userService.updateBookStatus(id, bookId, status);
+    res.status(200).json({ updatedStatus: status });
   } catch (error) {
     next(error);
   }
@@ -112,6 +134,8 @@ const userController = {
   deleteBookFromListId,
   changeListNameFromListId,
   getUserList,
+  updateBookStatus,
+  updateUserDescription
 };
 
 export default userController;

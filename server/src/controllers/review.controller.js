@@ -47,7 +47,7 @@ const deleteUserReview = async (req, res, next) => {
     const { bookId } = req.body;
     const { id } = req.credentials;
     const deletedReview = await reviewService.deleteUserReview(id, bookId);
-    return res.status(200).json({ message: deletedReview });
+    return res.status(200).json({ "deletedReview": deletedReview });
   } catch (error) {
     next(error);
   }

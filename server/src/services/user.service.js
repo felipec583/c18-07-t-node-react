@@ -1,6 +1,13 @@
 import db from "../models/index.js";
 import CustomError from "../helpers/customError.js";
 
+const updateUserDescription = async (userId, description) => {
+  const foundUser = await db.User.findById(userId);
+
+  foundUser.description = description;
+  await foundUser.save();
+};
+
 const addBookToUserLibrary = async (bookId, userId) => {
   const foundUser = await db.User.findById(userId);
 
@@ -37,7 +44,7 @@ const deleteBookFromUserLibrary = async (bookId, userId) => {
     await foundUser.save();
     return foundBook.title;
   } else {
-    return "Este libro no existe en tu biblioteca";
+    throw new CustomError(404, "Este libro no existe en tu biblioteca");
   }
 };
 
@@ -51,8 +58,9 @@ const getUserLibrary = async (userId) => {
     },
     select: "publishDate description title image",
   });
-  return userLibrary.library.map(({ book, addedDate }) => ({
-    _id: book._id,
+  return userLibrary.library.map(({ book, addedDate, status, id }) => ({
+    _id: id,
+    bookId: book._id,
     title: book.title,
     publishDate: book.publishDate,
     author: book.author.name,
@@ -60,7 +68,20 @@ const getUserLibrary = async (userId) => {
     description: book.description,
     image: book.image,
     addedDate,
+    status,
   }));
+};
+
+const updateBookStatus = async (userId, bookId, status) => {
+  const foundUser = await db.User.findById(userId);
+  if (!foundUser) throw new CustomError(400, "El usuario no existe");
+  const bookInLibrary = foundUser.library.find(
+    (book) => book.book.toHexString() === bookId
+  );
+  if (!bookInLibrary)
+    throw new CustomError(400, "Este libro no existe en tu librería");
+  bookInLibrary.status = status;
+  await foundUser.save();
 };
 
 const createUserList = async (userId, name) => {
@@ -147,6 +168,8 @@ const userService = {
   deleteBookFromListId,
   changeListNameFromListId,
   getUserList,
+  updateBookStatus,
+  updateUserDescription,
 };
 
 export default userService;
