@@ -36,16 +36,12 @@ morgan.token("statusColor", (req, res) => {
 });
 
 morgan.token("errorMessage", (req, res) => {
-  if (
-    Object.values(res.locals.body)[1].success ||
-    Object.values(res.locals.body)[0] === "success"
-  ) {
-    return ` ${chalk
-      .hex("FFC500")
-      .bold("\nError message: ")}${chalk.yellowBright(
-      JSON.stringify(res.locals.body.message)
-    )}`;
-  }
+  return res.locals.body?.details.success ||
+  res.locals.body?.success 
+    ? ` ${chalk.hex("FFC500").bold("\nError message: ")}${chalk.yellowBright(
+        JSON.stringify(res.locals.body.message)
+      )}`
+    : "";
 });
 
 const morganConfig = (tokens, req, res) => {
