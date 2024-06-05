@@ -1,13 +1,12 @@
 import db from "../models/index.js";
 
 const search = async (query) => {
-  // /api/search?q=emma&limit=25&offset=0&type=author
+  // /api/search?q=emma&limit=25&type=author
   const { q, limit, offset, page, type } = query
   const regex = { $regex: new RegExp('^' + q), $options: "i" }
   const options = {
     limit: limit || 20,
-    offset: offset || 0,
-    page: page || 0,
+    page: page || 1,
   }
   if (type == "author") {
     return await db.Author.paginate({ "name": regex }, options)
@@ -24,10 +23,8 @@ const getBooksFromGenreId = async (query) => {
   const { id, limit, offset, page } = query
   const options = {
     limit: limit || 20,
-    offset: offset || 0,
     page: page || 0,
   }
-
   return await db.Book.paginate({ "genre": id }, { ...options, populate: ["author", "genres.genre"] })
 }
 
@@ -35,7 +32,6 @@ const getBooksFromAuthorId = async (query) => {
   const { id, limit, offset, page } = query
   const options = {
     limit: limit || 20,
-    offset: offset || 0,
     page: page || 0,
   }
   return await db.Book.paginate({ "author ": id }, { ...options, populate: ["author", "genres.genre"] })
