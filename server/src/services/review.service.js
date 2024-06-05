@@ -1,6 +1,8 @@
 import { CURRENT_DATE } from "../config/constants.js";
 import db from "../models/index.js";
 import checkBookandUser from "../utils/checkBookandUser.js";
+import checkPreviousUserComment from "../utils/checkPreviousUserComment.js";
+import CustomError from "../helpers/customError.js";
 const addUserReviewToBook = async (userId, bookId, content) => {
   const bookAndUserCheck = await checkBookandUser(bookId, userId);
 
@@ -13,12 +15,12 @@ const addUserReviewToBook = async (userId, bookId, content) => {
 
     return newReview;
   }
-  throw new Error("Ya has hecho una reseña a este libro");
+  throw new CustomError(400, "Ya has hecho una reseña a este libro");
 };
 
 const deleteUserReview = async (userId, bookId) => {
   const bookAndUserCheck = await checkBookandUser(bookId, userId);
-  if (!bookAndUserCheck) throw new Error("No existe esta reseña");
+  if (!bookAndUserCheck) throw new CustomError(400, "No existe esta reseña");
   const reviewToDeleteId = bookAndUserCheck.id;
 
   const result = await db.Review.findByIdAndDelete(reviewToDeleteId);
@@ -28,7 +30,7 @@ const deleteUserReview = async (userId, bookId) => {
 const updateReview = async (userId, bookId, content) => {
   const foundBookandUser = await checkBookandUser(bookId, userId);
   if (!foundBookandUser) {
-    throw new Error("Este usuario no tiene reseñas de este libro");
+    throw new CustomError(400, "Este usuario no tiene reseñas de este libro");
   }
 
   foundBookandUser.text = content.text;
@@ -55,7 +57,7 @@ const getUserReviews = async (userId) => {
 };
 const getBookReviews = async (bookId) => {
   const foundBook = await db.Book.findById(bookId);
-  if (!foundBook) throw new Error("Este libro no existe");
+  if (!foundBook) throw new CustomError(400, "Este libro no existe");
   const bookReviews = await db.Review.find({ bookId: bookId }).populate(
     "comments.commentId"
   );
@@ -74,16 +76,17 @@ const getBookReviews = async (bookId) => {
 const addLikeToReview = async (bookId, userId, userLikeId) => {
   const foundBookandUser = await checkBookandUser(bookId, userId);
   if (!foundBookandUser) {
-    throw new Error("Este usuario no tiene reseñas de este libro");
+    throw new CustomError(400, "Este usuario no tiene reseñas de este libro");
   }
   const userLikeInfo = await db.User.findById(userLikeId).select(
     "username -_id"
   );
-  if (!userLikeInfo) throw new Error("Este usuario no existe");
+  if (!userLikeInfo) throw new CustomError(400, "Este usuario no existe");
   const findUserLike = foundBookandUser.likes.some(
     (user) => user._id.toString() === userLikeId
   );
-  if (findUserLike) throw new Error("Ya le has dado like a esta reseña");
+  if (findUserLike)
+    throw new CustomError(400, "Ya le has dado like a esta reseña");
   foundBookandUser.likes.push(userLikeId);
   await foundBookandUser.save();
   return userLikeInfo;
@@ -92,13 +95,14 @@ const addLikeToReview = async (bookId, userId, userLikeId) => {
 const deleteLikeFromReview = async (bookId, userId, userLikeId) => {
   const foundBookandUserReview = await checkBookandUser(bookId, userId);
   if (!foundBookandUserReview) {
-    throw new Error("Este usuario no tiene reseñas de este libro");
+    throw new CustomError(400, "Este usuario no tiene reseñas de este libro");
   }
 
   const findUserLike = foundBookandUserReview.likes.some(
     (user) => user._id.toString() === userLikeId
   );
-  if (!findUserLike) throw new Error("No le has hecho like a esta reseña");
+  if (!findUserLike)
+    throw new CustomError(400, "No le has hecho like a esta reseña");
 
   foundBookandUserReview.likes = foundBookandUserReview.likes.filter(
     (user) => user._id.toString() !== userLikeId
@@ -111,22 +115,28 @@ const deleteLikeFromReview = async (bookId, userId, userLikeId) => {
 const addCommentToReview = async (bookId, userId, userCommentId, comment) => {
   const foundBookandUserReview = await checkBookandUser(bookId, userId);
   if (!foundBookandUserReview) {
-    throw new Error("Este usuario no tiene reseñas de este libro");
+    throw new CustomError(400, "Este usuario no tiene reseñas de este libro");
   }
   const userLikeInfo = await db.User.findById(userCommentId);
-  if (!userLikeInfo) throw new Error("Este usuario no existe");
+  if (!userLikeInfo) throw new CustomError(400, "Este usuario no existe");
 
   const foundReviewId = foundBookandUserReview.id;
-  /* Think of a logic that if you have already created a comment,
-you cannot comment again if there is only one comment and belongs to you
-or to set a limit until there a more interactions and it doesnt become spam */
+  const foundComment = await db.Comment.find({ reviewId: foundReviewId });
 
-  /* Say if the next previous comment was made by yourself, you can't comment again
-   */
+  //Si el último comentario pertenece al usuario que está intentando agregar otro.
+  // La idea es para evitar que el usuario espere que otros usuarios comenten también y no se repita.
+
+  //Otra idea puede ser que se le permite 2 comentarios y esperar por otro usuario
+  const isPreviousUserComment = checkPreviousUserComment(
+    foundComment,
+    userCommentId
+  );
+  if (isPreviousUserComment)
+    throw new CustomError(400, "Debes esperar que los otros usuarios comenten");
   const newComment = await db.Comment.create({
     reviewId: foundReviewId,
     createdBy: userCommentId,
-    commentText: comment,
+    text: comment,
   });
 
   foundBookandUserReview.comments.push({
@@ -145,19 +155,20 @@ const updateComment = async (
 ) => {
   const foundReview = await db.Review.findById(reviewId);
   if (!foundReview) {
-    throw new Error("Esta reseña no existe");
+    throw new CustomError(400, "Esta reseña no existe");
   }
   const userLikeInfo = await db.User.findById(userCommentId);
-  if (!userLikeInfo) throw new Error("Este usuario no existe");
+  if (!userLikeInfo) throw new CustomError(400, "Este usuario no existe");
 
   const findCommentCreator = await db.Comment.findOne({
     createdBy: userCommentId,
     reviewId: foundReview.id,
     _id: commentId,
   });
-  if (!findCommentCreator) throw new Error("Este usuario no tiene comentarios");
+  if (!findCommentCreator)
+    throw new CustomError(400, "Este usuario no tiene comentarios");
 
-  findCommentCreator.commentText = newComment;
+  findCommentCreator.text = newComment;
   await findCommentCreator.save();
 
   return { "nuevo comentario": newComment };
@@ -165,7 +176,7 @@ const updateComment = async (
 
 const deleteComment = async (reviewId, userCommentId, commentId) => {
   const userLikeInfo = await db.User.findById(userCommentId);
-  if (!userLikeInfo) throw new Error("Este usuario no existe");
+  if (!userLikeInfo) throw new CustomError(400, "Este usuario no existe");
   const foundReviewComment = await db.Comment.findOne({
     createdBy: userCommentId,
     reviewId: reviewId,

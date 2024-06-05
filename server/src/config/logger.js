@@ -2,7 +2,9 @@ import morgan from "morgan";
 import chalk from "chalk";
 morgan.token("body", (req, res) =>
   Object.values(req.body).length > 0
-    ? `\n${chalk.hex("00ECFF").bold("Request Body")}: ${JSON.stringify(req.body)}`
+    ? `\n${chalk.hex("00ECFF").bold("Request Body")}: ${JSON.stringify(
+      req.body
+    )}`
     : ""
 );
 
@@ -23,14 +25,23 @@ morgan.token("statusColor", (req, res) => {
     status >= 500
       ? "FF1B00" // red
       : status >= 400
-      ? "FFC500" // yellow
-      : status >= 300
-      ? "00ECFF" // cyan
-      : status >= 200
-      ? "0FFF00" // green
-      : 0;
+        ? "FFC500" // yellow
+        : status >= 300
+          ? "00ECFF" // cyan
+          : status >= 200
+            ? "0FFF00" // green
+            : 0;
 
   return chalk.hex(color).bold(status);
+});
+
+morgan.token("errorMessage", (req, res) => {
+  return res.locals.body?.details?.success ||
+    res.locals.body?.success
+    ? ` ${chalk.hex("FFC500").bold("\nError message: ")}${chalk.yellowBright(
+      JSON.stringify(res.locals.body.message)
+    )}`
+    : "";
 });
 
 const morganConfig = (tokens, req, res) => {
@@ -43,6 +54,7 @@ const morganConfig = (tokens, req, res) => {
     tokens.res[(req, res, "content-length")],
     `${tokens["response-time"](req, res)} ms`,
     tokens.body(req, res),
+    tokens.errorMessage(req, res),
   ].join(" ");
 };
 

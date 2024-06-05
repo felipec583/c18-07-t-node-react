@@ -34,7 +34,7 @@ const getBooksFromAuthorId = async (query) => {
     limit: limit || 20,
     page: page || 0,
   }
-  return await db.Book.paginate({ "author ": id }, { ...options, populate: ["author", "genres.genre"] })
+  return await db.Book.paginate({ "author": id }, { ...options, populate: ["author", "genres.genre"] })
 }
 
 const searchService = {
