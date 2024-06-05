@@ -2,7 +2,7 @@ import db from "../models/index.js";
 
 const search = async (query) => {
   // /api/search?q=emma&limit=25&type=author
-  const { q, limit, offset, page, type } = query
+  const { q, limit, page, type } = query
   const regex = { $regex: new RegExp('^' + q), $options: "i" }
   const options = {
     limit: limit || 20,
@@ -20,7 +20,7 @@ const search = async (query) => {
 }
 
 const getBooksFromGenreId = async (query) => {
-  const { id, limit, offset, page } = query
+  const { id, limit, page } = query
   const options = {
     limit: limit || 20,
     page: page || 0,
@@ -29,7 +29,7 @@ const getBooksFromGenreId = async (query) => {
 }
 
 const getBooksFromAuthorId = async (query) => {
-  const { id, limit, offset, page } = query
+  const { id, limit, page } = query
   const options = {
     limit: limit || 20,
     page: page || 0,
