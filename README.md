@@ -108,5 +108,5 @@ npm run dev
 - Felipe Castillo - Backend
 - Pablo Palazzetti - Frontend
 - Pablo López - Backend 
-- Bianca - UX/UI
+- Bianca Ciotti- UX/UI
 - Mauricio Fernando - Testing
