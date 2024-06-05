@@ -109,11 +109,11 @@ const deleteBookFromListId = async (userId, listId, bookId) => {
   const index = user.list.findIndex(el => el.id == listId)
   if (index < 0) throw new Error("No se encontro la lista")
 
-  const filter = user.list[index].booklist.filter(el => el.id != bookId)
+  const filter = user.list[index].booklist.filter(el => el.book != bookId)
   user.list[index].booklist = filter
 
   await user.save()
-  return { new: filter, totalList: user.list }
+  return { removed: filter, totalList: user.list }
 }
 
 const changeListNameFromListId = async (userId, listId, newName) => {
