@@ -14,7 +14,7 @@ export default function Biblioteca() {
           alt={title1}
         />
       </div>
-      <div className="h-[140px] flex flex-col items-start justify-between">
+      <div className="h-[140px]  flex flex-col items-start justify-between">
         <div className="">
           <div className="flex flex-col items-start justify-start">
             <div className="text-neutral-800 text-base font-semibold font-['Inter']">
@@ -63,7 +63,7 @@ export default function Biblioteca() {
     <>
       {access === true ? (
         <div className="w-full h-full lg:h-[220px] flex flex-col justify-start items-center gap-8">
-          <div className="w-[80%] flex justify-between items-center">
+          <div className="w-full flex justify-between items-center">
             <div className="text-zinc-800 text-xl font-medium font-['Inter']">
               Tu biblioteca:
             </div>
@@ -71,7 +71,7 @@ export default function Biblioteca() {
               Ver más
             </div>
           </div>
-          <div className="w-[80%] flex flex-col lg:flex-row justify-between items-start gap-5">
+          <div className="w-full flex flex-col lg:flex-row justify-between items-start gap-5">
             {books.map((book, index) => (
               <Card key={index} {...book} />
             ))}

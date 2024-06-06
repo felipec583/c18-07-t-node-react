@@ -2,16 +2,17 @@ import React from "react";
 import { useRutes } from "../hooks/useRutes";
 import { useSelector } from "react-redux";
 import { getAccess } from "../redux/userSlice";
-import useUser from "../hooks/useUser";
-import { Avatar } from "antd";
-import { FaUserCircle } from "react-icons/fa";
+import MenuDesplegable from "./MenuDesplegable";
 export default function Navbar() {
   const access = useSelector(getAccess);
-  const { goToLogin, goToRegister, goToDescubrir } = useRutes();
-  const { handleLogout } = useUser();
+  const { goToLogin, goToRegister, goToDescubrir, goToHome, goToMiBiblioteca } =
+    useRutes();
   return (
     <div className="w-full h-[80px] lg:px-[20px] py-[15px] bg-white shadow justify-between items-center inline-flex">
-      <div className="justify-start items-start gap-2.5 flex pl-[60px]">
+      <div
+        onClick={goToHome}
+        className="justify-start items-start gap-2.5 flex pl-[60px] cursor-pointer"
+      >
         <img src="./Frame 47.png" alt="" />
       </div>
       {access === false ? (
@@ -38,29 +39,15 @@ export default function Navbar() {
             Descubrir
           </button>
           <button
-            onClick={handleLogout}
+            onClick={goToMiBiblioteca}
             className="text-zinc-500 text-xl font-medium font-['Inter'] mx-3"
           >
             Tu biblioteca
           </button>
-          <button
-            onClick={handleLogout}
-            className="text-zinc-500 text-xl font-medium font-['Inter'] mx-3"
-          >
+          <button className="text-green-400 text-xl font-semibold font-['Inter'] mx-3">
             Subir libro
           </button>
-          <button
-            onClick={handleLogout}
-            className="text-zinc-500 text-xl font-medium font-['Inter'] mx-3"
-          >
-            Cerrar Sesion
-          </button>
-          <Avatar
-            style={{
-              backgroundColor: "#87d068",
-            }}
-            icon={<FaUserCircle />}
-          />
+          <MenuDesplegable />
         </div>
       )}
     </div>
