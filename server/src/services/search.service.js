@@ -1,13 +1,12 @@
 import db from "../models/index.js";
 
 const search = async (query) => {
-  // /api/search?q=emma&limit=25&offset=0&type=author
-  const { q, limit, offset, page, type } = query
+  // /api/search?q=emma&limit=25&type=author
+  const { q, limit, page, type } = query
   const regex = { $regex: new RegExp('^' + q), $options: "i" }
   const options = {
     limit: limit || 20,
-    offset: offset || 0,
-    page: page || 0,
+    page: page || 1,
   }
   if (type == "author") {
     return await db.Author.paginate({ "name": regex }, options)
@@ -21,24 +20,26 @@ const search = async (query) => {
 }
 
 const getBooksFromGenreId = async (query) => {
-  const { id, limit, offset, page } = query
+  const { id, limit, page, q } = query
+  const regex = { $regex: new RegExp('^' + q), $options: "i" }
   const options = {
     limit: limit || 20,
-    offset: offset || 0,
     page: page || 0,
   }
-
-  return await db.Book.paginate({ "genre": id }, { ...options, populate: ["author", "genres.genre"] })
+  const pagination = !q ? { "genre": id } : { "genre": id, "title": regex }
+  return await db.Book.paginate(pagination, { ...options, populate: ["author", "genres.genre"] })
 }
 
 const getBooksFromAuthorId = async (query) => {
-  const { id, limit, offset, page } = query
+  const { id, limit, page, q } = query
+  const regex = { $regex: new RegExp('^' + q), $options: "i" }
   const options = {
     limit: limit || 20,
-    offset: offset || 0,
     page: page || 0,
   }
-  return await db.Book.paginate({ "author ": id }, { ...options, populate: ["author", "genres.genre"] })
+
+  const pagination = !q ? { "author": id } : { "author": id, "title": regex }
+  return await db.Book.paginate(pagination, { ...options, populate: ["author", "genres.genre"] })
 }
 
 const searchService = {

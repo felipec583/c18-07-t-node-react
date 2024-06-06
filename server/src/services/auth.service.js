@@ -1,6 +1,7 @@
 import { compareSync } from "bcrypt";
 import jwt from "jsonwebtoken";
 import CustomError from "../helpers/customError.js";
+import CustomError from "../helpers/customError.js";
 import db from "../models/index.js";
 import GoogleClient from "../config/googleAuth.js";
 import { GOOGLE_CLIENT_ID, JWT_SECRET } from "../config/constants.js";
@@ -67,8 +68,9 @@ const googleAuth = async (token) => {
   if (!userdb)
     userdb = await db.User.create({
       email,
-      username: sub,
-      password: "GoogleAuth-" + name,
+      username: email.split("@")[0],
+      password: sub,
+      accountType: "google",
     });
 
   const jwtToken = jwt.sign(
