@@ -67,8 +67,9 @@ const googleAuth = async (token) => {
   if (!userdb)
     userdb = await db.User.create({
       email,
-      username: sub,
-      password: "GoogleAuth-" + name,
+      username: email.split("@")[0],
+      password: sub,
+      accountType: "google",
     });
 
   const jwtToken = jwt.sign(

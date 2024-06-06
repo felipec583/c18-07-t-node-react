@@ -36,7 +36,7 @@ morgan.token("statusColor", (req, res) => {
 });
 
 morgan.token("errorMessage", (req, res) => {
-  return res.locals.body?.details.success ||
+  return res.locals.body?.details?.success ||
   res.locals.body?.success 
     ? ` ${chalk.hex("FFC500").bold("\nError message: ")}${chalk.yellowBright(
         JSON.stringify(res.locals.body.message)
