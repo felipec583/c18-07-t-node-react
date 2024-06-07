@@ -18,7 +18,7 @@ const useUser = () => {
   const handleLogin = async (values) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
+        "https://c18-07-t-node-react-rcb1.onrender.com/api/auth/login",
         values
       );
       if (response) {
@@ -40,7 +40,7 @@ const useUser = () => {
   const handleRegister = async (values) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/register",
+        "https://c18-07-t-node-react-rcb1.onrender.com/api/auth/register",
         values
       );
       if (response) {
