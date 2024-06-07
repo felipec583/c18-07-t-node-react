@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import PortadaHome from "../components/PortadaHome";
 import BooksHome from "../components/BooksHome";
 import AddLibroHome from "../components/AddLibroHome";
+import Biblioteca from "../components/Biblioteca";
 
 export default function Home() {
   return (
@@ -10,6 +11,10 @@ export default function Home() {
       <Navbar />
       <PortadaHome />
       <BooksHome />
+      <div className="w-[80%] my-24 border-2 border-zinc-400 self-center"></div>
+      <div className="w-4/5">
+        <Biblioteca />
+      </div>
       <div className="w-[80%] mt-24 border-2 border-zinc-400 self-center"></div>
       <AddLibroHome />
     </div>

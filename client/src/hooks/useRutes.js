@@ -5,5 +5,19 @@ export const useRutes = () => {
   const goToHome = () => navigate("/");
   const goToRegister = () => navigate("/register");
   const goToLogin = () => navigate("/login");
-  return { goToHome, goToRegister, goToLogin };
+  const goToDescubrir = () => navigate("/descubrir");
+  const goToPerfil = () => navigate("/miPerfil");
+  const goToMiBiblioteca = () => navigate("/miBiblioteca");
+  const handleGoBack = () => {
+    window.history.back();
+  };
+  return {
+    goToHome,
+    goToRegister,
+    goToLogin,
+    goToDescubrir,
+    goToPerfil,
+    goToMiBiblioteca,
+    handleGoBack,
+  };
 };
