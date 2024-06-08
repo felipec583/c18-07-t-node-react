@@ -1,10 +1,9 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import FormLogin from "../components/FormLogin";
-import { FcGoogle } from "react-icons/fc";
 import { useRutes } from "../hooks/useRutes";
-import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
+import GoogleLoginButton from "../components/GoogleLoginButton";
+
 export default function Login() {
   const { goToRegister } = useRutes();
   return (
@@ -26,26 +25,7 @@ export default function Login() {
             </div>
             <FormLogin />
             <div className="w-full h-[0px] border-2 border-zinc-400"></div>
-            <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                console.log(credentialResponse);
-                try {
-                  const response = axios.post(
-                    "https://c18-07-t-node-react-rcb1.onrender.com/api/auth/google",
-                    { token: credentialResponse.credential }
-                  );
-                  if (response) {
-                    console.log(response);
-                  }
-                } catch (error) {
-                  console.log(error);
-                }
-              }}
-              onError={() => {
-                console.log("Login Failed");
-              }}
-              useOneTap
-            />
+            <GoogleLoginButton />
             <div className="flex">
               <div className="text-neutral-700 text-base font-normal font-['Inter']">
                 ¿No tenes una cuenta en Bookpal?

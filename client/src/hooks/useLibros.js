@@ -3,25 +3,30 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllBooks,
   setAllBooks,
-  addFantasiaBook,
-  addFiccionBook,
-  addRomanceBooks,
-  addMisterioBooks,
   getFiccionBooks,
+  setFiccionBook,
+  setFantasiaBook,
+  setMisterioBooks,
+  setRomanceBook,
   getFantasiaBooks,
-  getRomanceBooks,
   getMisterioBooks,
+  getRomanceBooks,
+  setFilteredBooks,
+  getFilteredBooks,
 } from "../redux/booksSlice";
 import { useCallback, useEffect } from "react";
+import { useRutes } from "./useRutes";
 
 const useLibros = () => {
   const dispatch = useDispatch();
   const allBooks = useSelector(getAllBooks) || [];
-  const ficcionBooks = useSelector(getFiccionBooks) || [];
-  const fantasiaBooks = useSelector(getFantasiaBooks) || [];
-  const romanceBooks = useSelector(getRomanceBooks) || [];
-  const misterioBooks = useSelector(getMisterioBooks) || [];
+  const fantasiaBooks = useSelector(getFantasiaBooks);
+  const misterioBooks = useSelector(getMisterioBooks);
+  const ficcionBooks = useSelector(getFiccionBooks);
+  const romanceBooks = useSelector(getRomanceBooks);
+  const filteredBooks = useSelector(getFilteredBooks);
 
+  const { goToBook } = useRutes();
   const handleAllLibros = useCallback(async () => {
     try {
       const response = await axios.get(
@@ -34,58 +39,86 @@ const useLibros = () => {
       console.log(error);
     }
   }, [dispatch]);
+  const handleFiccionBooks = async () => {
+    try {
+      const response = await axios.get(
+        "https://c18-07-t-node-react-rcb1.onrender.com/api/search/genre?id=664fc77d46758e3059c0e328"
+      );
+      if (response) {
+        dispatch(setFiccionBook(response.data.response.docs));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleMisterioBooks = async () => {
+    try {
+      const response = await axios.get(
+        "https://c18-07-t-node-react-rcb1.onrender.com/api/search/genre?id=6657364f08d72a5120647356"
+      );
+      if (response) {
+        dispatch(setMisterioBooks(response.data.response.docs));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleRomanceBooks = async () => {
+    try {
+      const response = await axios.get(
+        "https://c18-07-t-node-react-rcb1.onrender.com/api/search/genre?id=6659c1371e56f3958c1b3a32"
+      );
+      if (response) {
+        dispatch(setRomanceBook(response.data.response.docs));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleFantasiaBooks = async () => {
+    try {
+      const response = await axios.get(
+        "https://c18-07-t-node-react-rcb1.onrender.com/api/search/genre?id=66573fa008d72a5120647370"
+      );
+      if (response) {
+        dispatch(setFantasiaBook(response.data.response.docs));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleBookById = useCallback(
+    (book) => {
+      dispatch(setFilteredBooks(book));
+      goToBook(book._id);
+    },
+    [dispatch]
+  );
 
-  const categorizeLibros = useCallback(() => {
-    const ficcion = new Set();
-    const fantasia = new Set();
-    const romance = new Set();
-    const misterio = new Set();
-
-    allBooks.forEach((book) => {
-      book.genres.forEach((genreObj) => {
-        const genre = genreObj.genre.genre;
-        switch (genre) {
-          case "Ficción":
-            ficcion.add(book);
-            break;
-          case "Misterio":
-            misterio.add(book);
-            break;
-          case "Fantasía":
-            fantasia.add(book);
-            break;
-          case "Romance":
-            romance.add(book);
-            break;
-          default:
-            break;
-        }
-      });
-    });
-
-    dispatch(setAllBooks(allBooks));
-    dispatch(addFiccionBook([...ficcion]));
-    dispatch(addFantasiaBook([...fantasia]));
-    dispatch(addRomanceBooks([...romance]));
-    dispatch(addMisterioBooks([...misterio]));
-  }, [dispatch, allBooks]);
-
-  useEffect(() => {
-    handleAllLibros();
-  }, [handleAllLibros]);
-
-  useEffect(() => {
-    categorizeLibros();
-  }, [categorizeLibros, allBooks]);
+  useEffect(
+    () => {
+      handleAllLibros();
+      handleFiccionBooks();
+      handleMisterioBooks();
+      handleFantasiaBooks();
+      handleRomanceBooks();
+    },
+    [handleAllLibros],
+    [handleFiccionBooks],
+    [handleMisterioBooks],
+    [handleFantasiaBooks],
+    [handleRomanceBooks]
+  );
 
   return {
     handleAllLibros,
-    categorizeLibros,
     allBooks,
-    ficcionBooks,
     fantasiaBooks,
-    romanceBooks,
     misterioBooks,
+    ficcionBooks,
+    romanceBooks,
+    filteredBooks,
+    handleBookById,
   };
 };
 

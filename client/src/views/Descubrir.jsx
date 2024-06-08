@@ -26,11 +26,6 @@ export default function Descubrir() {
         </div>
       </div>
       <div className="w-[80%] -mt-28 h-full px-[67px] py-10 bg-white rounded-2xl border-2 border-neutral-300 flex-col justify-start items-start gap-10 inline-flex">
-        <div className="w-full justify-between items-center inline-flex">
-          <div className="grow shrink basis-0 text-green-700 text-xl font-medium font-['Inter']">
-            Todos:
-          </div>
-        </div>
         <BookList />
       </div>
       <div className="w-[80%] h-[0px] border-2 mt-24 border-neutral-200"></div>

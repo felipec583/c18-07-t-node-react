@@ -1,15 +1,10 @@
 import React from "react";
 import { IoIosSearch } from "react-icons/io";
-import { useSelector } from "react-redux";
-import {
-  getAllBooks,
-  getFantasiaBooks,
-  getFiccionBooks,
-} from "../redux/booksSlice";
+import useLibros from "../hooks/useLibros";
+import { useRutes } from "../hooks/useRutes";
 export default function BooksHome() {
-  const ficcionBooks = useSelector(getFiccionBooks);
-  // console.log(ficcionBooks);
-  const fantasiaBooks = useSelector(getFantasiaBooks);
+  const { fantasiaBooks, ficcionBooks, handleBookById } = useLibros();
+  const { goToDescubrir } = useRutes();
   return (
     <div className="w-full flex-col flex justify-start items-center self-center mt-10 lg:mt-36 gap-[52px]">
       <div className="w-full lg:w-[80%] justify-between items-center inline-flex px-4">
@@ -28,16 +23,20 @@ export default function BooksHome() {
                 <div className="text-zinc-800 text-[28px] font-medium font-['Inter']">
                   Ficcion:
                 </div>
-                <button className="text-green-400 text-xl font-semibold font-['Inter']">
+                <button
+                  onClick={goToDescubrir}
+                  className="text-green-400 text-xl font-semibold font-['Inter']"
+                >
                   Ver mas
                 </button>
               </div>
             </div>
             <div className="w-full lg:gap-5 justify-center items-start inline-flex flex-wrap">
-              {ficcionBooks.slice(0, 6).map((book) => (
+              {fantasiaBooks.slice(0, 6).map((book) => (
                 <div
                   key={book._id}
-                  className="w-[160px] flex-col justify-center items-center lg:mx-0 mx-2 lg:gap-3 lg:inline-flex"
+                  onClick={() => handleBookById(book)}
+                  className="w-[160px] flex-col justify-center items-center lg:mx-0 mx-2 lg:gap-3 lg:inline-flex hover:cursor-pointer hover:scale-105"
                 >
                   <div className="w-full h-[276.21px] relative">
                     <img
@@ -58,15 +57,19 @@ export default function BooksHome() {
               <div className="text-zinc-800 text-[28px] font-medium font-['Inter']">
                 Fantasia:
               </div>
-              <button className="text-green-400 text-xl font-semibold font-['Inter']">
+              <button
+                onClick={goToDescubrir}
+                className="text-green-400 text-xl font-semibold font-['Inter']"
+              >
                 Ver mas
               </button>
             </div>
             <div className="w-full lg:gap-5 justify-center items-start inline-flex flex-wrap">
-              {fantasiaBooks.slice(0, 6).map((book) => (
+              {ficcionBooks.slice(0, 6).map((book) => (
                 <div
                   key={book._id}
-                  className="w-auto flex-col justify-center items-center mx-2 lg:mx-0 lg:gap-3 lg:flex"
+                  onClick={() => handleBookById(book)}
+                  className="w-[160px] flex-col justify-center items-center lg:mx-0 mx-2 lg:gap-3 lg:inline-flex hover:cursor-pointer hover:scale-105"
                 >
                   <div className="w-[160px] h-[276.21px] relative">
                     <img
@@ -83,7 +86,10 @@ export default function BooksHome() {
             </div>
           </div>
         </div>
-        <button className="mt-8 lg:mt-4 px-6 py-3 bg-green-400 rounded-lg shadow justify-center items-center gap-2.5 inline-flex text-white text-2xl font-semibold font-['Inter']">
+        <button
+          onClick={goToDescubrir}
+          className="mt-8 lg:mt-4 px-6 py-3 bg-green-400 rounded-lg shadow justify-center items-center gap-2.5 inline-flex text-white text-2xl font-semibold font-['Inter']"
+        >
           Ver mas
         </button>
       </div>

@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import FormRegister from "../components/FormRegister";
 import { FcGoogle } from "react-icons/fc";
 import { useRutes } from "../hooks/useRutes";
+import GoogleLoginButton from "../components/GoogleLoginButton";
 
 export default function () {
   const { goToLogin } = useRutes();
@@ -25,11 +26,7 @@ export default function () {
             </div>
             <FormRegister />
             <div className="w-full h-[0px] border-2 border-zinc-400"></div>
-            <div className="w-full h-[40px] my-5 px-7 py-4 bg-white rounded-lg border border-zinc-500 justify-start items-center gap-6 inline-flex">
-              <button className="flex items-center justify-center text-zinc-600 text-xl font-normal font-['Inter']">
-                <FcGoogle className="mx-4 w-5 h-5" /> Continuar con Google
-              </button>
-            </div>
+            <GoogleLoginButton />
             <div className="flex">
               <div className="text-neutral-700 text-base font-normal font-['Inter']">
                 ¿Ya tienes una cuenta en Bookpal?

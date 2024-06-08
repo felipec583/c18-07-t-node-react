@@ -15,6 +15,18 @@ const useUser = () => {
   const dispatch = useDispatch();
   const { goToHome, goToLogin } = useRutes();
 
+  const handleGoogleLogin = async (values) => {
+    try {
+      const { success, token, user } = values
+      dispatch(setUser(user));
+      dispatch(login());
+      localStorage.setItem("token", token);
+      goToHome();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handleLogin = async (values) => {
     try {
       const response = await axios.post(
@@ -57,10 +69,11 @@ const useUser = () => {
     dispatch(setPassword(""));
     dispatch(setMail(""));
     dispatch(logout());
+    dispatch(setUser({}))
     localStorage.removeItem("token");
   };
 
-  return { handleLogin, handleRegister, handleLogout };
+  return { handleLogin, handleRegister, handleLogout, handleGoogleLogin };
 };
 
 export default useUser;

@@ -20,17 +20,17 @@ const booksSlice = createSlice({
     setFilteredBooks: (state, action) => {
       state.filteredBooks = action.payload;
     },
-    addFantasiaBook: (state, action) => {
-      state.fantasiaBooks = [...state.fantasiaBooks, action.payload];
+    setFantasiaBook: (state, action) => {
+      state.fantasiaBooks = action.payload;
     },
-    addRomanceBooks: (state, action) => {
-      state.romanceBooks = [...state.romanceBooks, action.payload];
+    setRomanceBook: (state, action) => {
+      state.romanceBooks = action.payload;
     },
-    addMisterioBooks: (state, action) => {
-      state.misterioBooks = [...state.misterioBooks, action.payload];
+    setMisterioBooks: (state, action) => {
+      state.misterioBooks = action.payload;
     },
-    addFiccionBook: (state, action) => {
-      state.ficcionBooks = [...state.ficcionBooks, action.payload];
+    setFiccionBook: (state, action) => {
+      state.ficcionBooks = action.payload;
     },
     setTerrorBooks: (state, action) => {
       state.terrorBooks = action.payload;
@@ -49,11 +49,11 @@ export const getFantasiaBooks = (state) => state.books.fantasiaBooks;
 export const {
   setAllBooks,
   setFilteredBooks,
-  addFantasiaBook,
-  addFiccionBook,
-  addRomanceBooks,
+  setFantasiaBook,
+  setFiccionBook,
+  setRomanceBook,
   setTerrorBooks,
-  addMisterioBooks,
+  setMisterioBooks,
 } = booksSlice.actions;
 
 export default booksSlice.reducer;
