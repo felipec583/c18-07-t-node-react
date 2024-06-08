@@ -26,7 +26,7 @@ const getBooksFromGenreId = async (query) => {
     limit: limit || 20,
     page: page || 0,
   }
-  const pagination = !q ? { "genres.genre": id } : { "genres.genre": id, "title": regex }
+  const pagination = !q ? { "genres.genre": id } : { "genres.genre": id, "title": regex } // aaaa
   return await db.Book.paginate(pagination, { ...options, populate: ["author", "genres.genre"] })
 }
 
