@@ -8,6 +8,7 @@ export const useRutes = () => {
   const goToDescubrir = () => navigate("/descubrir");
   const goToPerfil = () => navigate("/miPerfil");
   const goToMiBiblioteca = () => navigate("/miBiblioteca");
+  const goToBook = (id) => navigate(`book/${id}`);
   const handleGoBack = () => {
     window.history.back();
   };
@@ -19,5 +20,6 @@ export const useRutes = () => {
     goToPerfil,
     goToMiBiblioteca,
     handleGoBack,
+    goToBook,
   };
 };

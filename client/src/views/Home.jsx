@@ -4,8 +4,19 @@ import PortadaHome from "../components/PortadaHome";
 import BooksHome from "../components/BooksHome";
 import AddLibroHome from "../components/AddLibroHome";
 import Biblioteca from "../components/Biblioteca";
+import useLibros from "../hooks/useLibros";
 
 export default function Home() {
+  // const { handleAllLibros, categorizeLibros, allBooks } = useLibros();
+
+  // useEffect(() => {
+  //   handleAllLibros();
+  // }, [handleAllLibros]);
+
+  // useEffect(() => {
+  //   categorizeLibros();
+  // }, [categorizeLibros, allBooks]);
+
   return (
     <div className="flex-col flex justify-center items-center w-full text-black min-h-screen">
       <Navbar />

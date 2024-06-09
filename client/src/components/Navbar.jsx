@@ -13,7 +13,7 @@ export default function Navbar() {
         onClick={goToHome}
         className="justify-start items-start gap-2.5 flex pl-[60px] cursor-pointer"
       >
-        <img src="./Frame 47.png" alt="" />
+        <img src="/Frame 47.png" alt="Logo" />
       </div>
       {access === false ? (
         <div className="justify-end w-full items-end pr-10 lg:gap-[47px] flex">

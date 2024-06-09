@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import FormLogin from "../components/FormLogin";
-import { FcGoogle } from "react-icons/fc";
 import { useRutes } from "../hooks/useRutes";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 

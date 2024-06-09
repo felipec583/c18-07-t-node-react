@@ -34,7 +34,7 @@ export default function MenuDesplegable() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <img src="./image 6.png" className="w-10 h-10 rounded-full" />
+            <img src="/image 6.png" className="w-10 h-10 rounded-full" />
             {/* <Avatar sx={{ width: 32, height: 32, padding: 2 }}>
             </Avatar> */}
           </IconButton>
